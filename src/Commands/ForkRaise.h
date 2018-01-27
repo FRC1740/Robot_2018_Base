@@ -14,6 +14,6 @@ public:
 	void Interrupted();
 	double GetRightTrig();
 	double GetLeftTrig();
-};
+	};
 
 #endif  // ForkRaise_H

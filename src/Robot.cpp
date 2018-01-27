@@ -18,6 +18,8 @@
 #include "Commands/ForkRaise.h"
 #include "Commands/ExampleCommand.h"
 #include "Commands/MyAutoCommand.h"
+#include "Subsystems/ForkLifter.h"
+
 #include <ctre/Phoenix.h>
 
 #include "OI.h"
@@ -152,6 +154,7 @@ public:
 		SmartDashboard::PutBoolean("Compressor: ",compressor->Enabled());
 		SmartDashboard::PutBoolean("Pressure Switch: ", compressor->GetPressureSwitchValue());
 		SmartDashboard::PutNumber("Compressor Current: ", compressorCurrent = compressor->GetCompressorCurrent());
+
 	}
 
 	void TestPeriodic() override
