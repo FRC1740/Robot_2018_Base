@@ -1,6 +1,7 @@
 #ifndef MecanumSaucerDrive_H
 #define MecanumSaucerDrive_H
 
+#include <ADIS16448_IMU.h>
 #include "../CommandBase.h"
 #include "OI.h"
 
@@ -13,7 +14,7 @@
 
 class MecanumSaucerDrive : public CommandBase {
 public:
-	MecanumSaucerDrive();
+	MecanumSaucerDrive(ADIS16448_IMU *);
 	void Initialize();
 	void Execute();
 	bool IsFinished();
@@ -22,6 +23,8 @@ public:
 	double GetX();
 	double GetY();
 	double GetTwist();
+	ADIS16448_IMU *gyro;
+	double gyro_angle;
 };
 
 #endif  // MecanumSaucerDrive_H
