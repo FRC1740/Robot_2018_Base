@@ -18,6 +18,7 @@
 #include "Commands/ForkRaise.h"
 #include "Commands/ExampleCommand.h"
 #include "Commands/MyAutoCommand.h"
+#include "Commands/GrabLeft.h"//FIXME remove after test
 #include <ctre/Phoenix.h>
 #include <ADIS16448_IMU.h>
 
@@ -56,7 +57,9 @@ public:
 
 		m_chooser.AddDefault("Default Auto", &m_defaultAuto);
 		m_chooser.AddObject("My Auto", &m_myAuto);
+		//frc::SmartDashboard::init();
 		frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+		SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
 
 		printf("Instantiating compressor object...\n");
 		compressor = new Compressor();
@@ -64,9 +67,9 @@ public:
 		compressorEnabled = compressor->Enabled();
 		compressorPressureSwitch = compressor->GetPressureSwitchValue();
 		compressorCurrent = compressor->GetCompressorCurrent();
-
+		cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
+		camera.SetResolution(640, 480);
 		imu = new ADIS16448_IMU();
-
 		// drivemodechooser = new SendableChooser<Command*>;
 //		drivemodechooser->AddObject("Standard Tank Drive", new StandardTankDrive());
 //		drivemodechooser->AddObject("2 Joystick Mecanum", new MecanumTankDrive());
@@ -162,7 +165,7 @@ public:
 		gyroAngle = imu->GetAngleZ();
 		frc::Scheduler::GetInstance()->Run();
 		// -------------> Not working ---->SmartDashboard::PutNumber("Joystick X value", oi->extendBtn->Get());
-		// SmartDashboard::PutNumber("Joystick X value", oi->extendBtn->Get());
+		//sd->PutNumber("Joystick X value", oi->extendBtn->Get());
 		SmartDashboard::PutBoolean("Compressor: ",compressor->Enabled());
 		SmartDashboard::PutBoolean("Pressure Switch: ", compressor->GetPressureSwitchValue());
 		SmartDashboard::PutNumber("Compressor Current: ", compressorCurrent = compressor->GetCompressorCurrent());
