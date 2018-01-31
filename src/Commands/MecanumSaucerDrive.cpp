@@ -31,7 +31,7 @@ void MecanumSaucerDrive::Execute()
 	// Get input from OI TURN joystick
 	double twistOI = this->GetTwist(); // Right stick, x axis
 
-	if (oi->xboxYBtn->Get())
+	if (oi->xboxBackBtn->Get())
 		gyro->Reset();
 
 	gyro_angle = gyro->GetAngleZ();

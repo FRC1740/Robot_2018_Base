@@ -61,6 +61,9 @@ OI::OI() {
 	xboxBBtn->WhileHeld(new Descend); // FIXME: replace with WhileHeld(new Descend) command
 
 	xboxYBtn = new JoystickButton(xboxController, 4);
+	xboxYBtn->WhenPressed(new PistonExtend);
+
+	xboxBackBtn = new JoystickButton(xboxController, 7);
 
 	// ForkLift Raise & Lower utilize AXES 2 & 3 (Left & Right Triggers)
 

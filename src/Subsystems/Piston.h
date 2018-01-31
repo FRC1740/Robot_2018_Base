@@ -12,9 +12,10 @@ private:
 	DoubleSolenoid *s;
 public:
 	Piston();
-	bool isOpen;
 	void Extend();
 	void Retract();
+	void Toggle();
+	bool isExtended;
 };
 
 #endif
