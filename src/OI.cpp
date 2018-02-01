@@ -5,15 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "OI.h"
+#include <Buttons/JoystickButton.h>
+#include <Joystick.h>
+#include <OI.h>
+#include <Commands/Eject.h>
 #include <Commands/GearLight.h>
+#include <Commands/GrabLeft.h>
+#include <Commands/GrabRight.h>
 #include <Commands/PistonExtend.h>
 #include <Commands/PistonRetract.h>
 #include <Commands/Climb.h>
 #include <Commands/Descend.h>
-#include <Commands/GrabLeft.h>
-#include <Commands/GrabRight.h>
-#include <Commands/Eject.h>
 
 /* ****
  *
@@ -51,6 +53,7 @@ OI::OI() {
 	JoystickButton *pistonBtn = xboxYBtn;
 
 	lBumper = new JoystickButton(xboxController, 5);
+<<<<<<< HEAD
 	JoystickButton *grabLBtn = lBumper;
 	rBumper = new JoystickButton(xboxController, 6);
 	JoystickButton *grabRBtn = rBumper;
@@ -61,6 +64,15 @@ OI::OI() {
 	xboxSetupBtn = new JoystickButton(xboxController, 8);
 	JoystickButton *linearRetractBtn = xboxSetupBtn;
 
+=======
+	//lBumper->WhileHeld(new GrabLeft); // FIXME: replace WhileHeld(new GrabLeft) command
+	rBumper = new JoystickButton(xboxController, 6);
+	//rBumper->WhileHeld(new GrabRight); // FIXME: replace with WhenHeld(new GrabRight) command
+
+	// PowerCube Eject
+	xboxXBtn = new JoystickButton(xboxController, 3);
+	//xboxXBtn->WhileHeld(new Eject); // FIXME: Replace with WhileHeld(new Eject) command
+>>>>>>> 1b5c6ee682d43a7b976bd49d7dd07efb073d4ad0
 
 	// Climb & Descend
 	descendBtn->WhileHeld(new Descend);

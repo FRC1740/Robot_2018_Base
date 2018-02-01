@@ -16,11 +16,16 @@
 
 #include "Commands/autoNothing.h"
 #include "Commands/MecanumSaucerDrive.h"
-#include "Commands/ForkRaise.h"
-#include "Commands/ExampleCommand.h"
+//#include "Commands/ExampleCommand.h"
 #include "Commands/MyAutoCommand.h"
+<<<<<<< HEAD
 #include "Commands/GrabLeft.h"
 #include "Commands/GrabRight.h"
+=======
+#include "Subsystems/ForkLifter.h"
+#include <Commands/ForkMove.h>
+#include "Commands/GrabLeft.h"//FIXME remove after test
+>>>>>>> 1b5c6ee682d43a7b976bd49d7dd07efb073d4ad0
 #include <ctre/Phoenix.h>
 #include "ADIS16448_IMU.h"
 
@@ -36,8 +41,14 @@ private:
 	Command *teleopCommand = nullptr;
 	Command *fork = nullptr;
 
+<<<<<<< HEAD
 	SendableChooser<Command*> *autochooser;
 	SendableChooser<Command*> *teleopchooser;
+=======
+	//ExampleCommand m_defaultAuto;
+	MyAutoCommand m_myAuto;
+	frc::SendableChooser<frc::Command*> m_chooser;
+>>>>>>> 1b5c6ee682d43a7b976bd49d7dd07efb073d4ad0
 	Compressor *compressor;
 	bool compressorEnabled, compressorPressureSwitch;
 	double compressorCurrent;
@@ -52,6 +63,7 @@ public:
 
 		CommandBase::init(); // Borrowed from 2017 code base
 
+<<<<<<< HEAD
 		autochooser = new SendableChooser<Command*>;
 		teleopchooser = new SendableChooser<Command*>;
 		imu = new ADIS16448_IMU(); // Instantiate before Sendable Chooser
@@ -65,6 +77,10 @@ public:
 		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(imu));
 		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
 
+=======
+		//m_chooser.AddDefault("Default Auto", &m_defaultAuto);
+		m_chooser.AddObject("My Auto", &m_myAuto);
+>>>>>>> 1b5c6ee682d43a7b976bd49d7dd07efb073d4ad0
 		//frc::SmartDashboard::init();
 		frc::SmartDashboard::PutData("Auto Modes", autochooser);
 		frc::SmartDashboard::PutData("Teleop Modes", teleopchooser);
@@ -110,11 +126,21 @@ public:
 	 */
 	void AutonomousInit() override
 	{
+<<<<<<< HEAD
 		imu->Reset();
 		gyroAngle = 0.0;
 
 		/*
 		 * In our Left Field Command Group, do something like this:
+=======
+		std::string autoSelected = frc::SmartDashboard::GetString(
+				"Auto Selector", "Default");
+		if (autoSelected == "My Auto") {
+			m_autonomousCommand = &m_myAuto;
+		} else {
+			//m_autonomousCommand = &m_defaultAuto;
+		}
+>>>>>>> 1b5c6ee682d43a7b976bd49d7dd07efb073d4ad0
 
 		if(gameData[0] == 'L')
 		{
@@ -167,7 +193,15 @@ public:
 		if (teleopCommand != nullptr)
 			teleopCommand->Start();
 
+<<<<<<< HEAD
 		fork = new ForkRaise();
+=======
+		climber = new Climb();
+		if (climber != nullptr)
+			climber->Start();
+		 */
+		fork = new ForkMove();
+>>>>>>> 1b5c6ee682d43a7b976bd49d7dd07efb073d4ad0
 		if (fork != nullptr)
 			fork->Start();
 
@@ -184,6 +218,7 @@ public:
 		SmartDashboard::PutBoolean("Compressor: ",compressor->Enabled());
 		SmartDashboard::PutBoolean("Pressure Switch: ", compressor->GetPressureSwitchValue());
 		SmartDashboard::PutNumber("Compressor Current: ", compressorCurrent = compressor->GetCompressorCurrent());
+
 	}
 
 	void TestPeriodic() override
