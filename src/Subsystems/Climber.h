@@ -1,9 +1,10 @@
 #ifndef Climber_H
 #define Climber_H
 
-#include <Commands/Subsystem.h>
-#include "WPILib.h"
+#include "../RobotMap.h"
 #include <ctre/Phoenix.h>
+#include <Commands/Subsystem.h>
+#include <WPILib.h>
 
 class Climber : public Subsystem
 {

@@ -35,39 +35,54 @@ OI::OI() {
 	// Driver Station USB slot 4: Xbox controller
 	xboxController = new Joystick(4);
 	// Green light from SteamWorks "Gear Ready"
-	gearLightBtn = new JoystickButton(xboxController, 9); // Left Stick
-	gearLightBtn->WhileHeld(new GearLight);
+	// gearLightBtn = new JoystickButton(xboxController, 9); // Left Stick
+	// gearLightBtn->WhileHeld(new GearLight);
 
-	// Piston Extend & Retract buttons
-	extendBtn = new JoystickButton(xboxController, 7);
-	extendBtn->WhenPressed(new PistonExtend);
-	retractBtn = new JoystickButton(xboxController, 8);
-	retractBtn->WhenPressed(new PistonRetract);
-
-	// PowerCube Grab
-	lBumper = new JoystickButton(xboxController, 5);
-	lBumper->WhileHeld(new GrabLeft); // FIXME: replace WhileHeld(new GrabLeft) command
-	rBumper = new JoystickButton(xboxController, 6);
-	rBumper->WhileHeld(new GrabRight); // FIXME: replace with WhenHeld(new GrabRight) command
-
-	// PowerCube Eject
-	xboxXBtn = new JoystickButton(xboxController, 3);
-	xboxXBtn->WhileHeld(new Eject); // FIXME: Replace with WhileHeld(new Eject) command
-
-	// Climb & Descend
-	xboxABtn = new JoystickButton(xboxController, 2);
-	xboxABtn->WhileHeld(new Climb); // FIXME: replace with WhileHeld(new Climb) command
+	// xBox Button Mapping
 	xboxBBtn = new JoystickButton(xboxController, 1);
-	xboxBBtn->WhileHeld(new Descend); // FIXME: replace with WhileHeld(new Descend) command
+	xboxABtn = new JoystickButton(xboxController, 2);
+	JoystickButton *climbBtn = xboxABtn;
+	JoystickButton *descendBtn = xboxBBtn;
+
+	xboxXBtn = new JoystickButton(xboxController, 3);
+	JoystickButton *eject = xboxXBtn;
 
 	xboxYBtn = new JoystickButton(xboxController, 4);
-	xboxYBtn->WhenPressed(new PistonExtend);
+	JoystickButton *pistonBtn = xboxYBtn;
+
+	lBumper = new JoystickButton(xboxController, 5);
+	JoystickButton *grabLBtn = lBumper;
+	rBumper = new JoystickButton(xboxController, 6);
+	JoystickButton *grabRBtn = rBumper;
 
 	xboxBackBtn = new JoystickButton(xboxController, 7);
+	JoystickButton *linearExtendBtn = xboxBackBtn;
+
+	xboxSetupBtn = new JoystickButton(xboxController, 8);
+	JoystickButton *linearRetractBtn = xboxSetupBtn;
+
+
+	// Climb & Descend
+	descendBtn->WhileHeld(new Descend);
+	climbBtn->WhileHeld(new Climb);
+
+	// PowerCube Eject
+	eject->WhileHeld(new Eject);
+
+	// Piston Extend & Retract is a "Y-Toggle"
+	pistonBtn->WhenPressed(new PistonExtend); // FIXME: Rename class? actually toggles extend/retract
+
+	// PowerCube Grab
+	grabLBtn->WhileHeld(new GrabLeft);
+	grabRBtn->WhileHeld(new GrabRight);
+
+	// Linear Actuator Extend & Retract (Manual) Back/Setup buttons
+	linearExtendBtn->WhileHeld(new GearLight(false));
+	linearRetractBtn->WhileHeld(new GearLight(true));
 
 	// ForkLift Raise & Lower utilize AXES 2 & 3 (Left & Right Triggers)
 
 	// Initialize the Co-Driver's controller in USB slot 5
-	NESController = new Joystick(5);
+	// NESController = new Joystick(5); // FIXME: Add NES Controller inputs & commands
 
 }

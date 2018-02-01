@@ -17,9 +17,9 @@ public:
 	// Map buttons for turning in gear light
 	JoystickButton *gearLightBtn;
 
-	// Pneumatic piston
-	JoystickButton *extendBtn;
-	JoystickButton *retractBtn;
+	// Linear Actuator
+	// JoystickButton *extendBtn;
+	// JoystickButton *retractBtn;
 
 	// Climb & Descend are Triggers (axes 2 & 3)
 
@@ -30,9 +30,16 @@ public:
 	// Left & Right Grabber Motors
 	JoystickButton *lBumper;
 	JoystickButton *rBumper;
+
+	// Eject PowerCube
 	JoystickButton *xboxXBtn;
+
+	// Toggle Pneumatic Piston
 	JoystickButton *xboxYBtn;
+
+	// Linear Actuator
 	JoystickButton *xboxBackBtn;
+	JoystickButton *xboxSetupBtn;
 
 	// Co-Driver - NES Controller
 	Joystick *NESController;

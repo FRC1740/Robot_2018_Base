@@ -14,13 +14,15 @@
 #include <SmartDashboard/SmartDashboard.h>
 #include <TimedRobot.h>
 
+#include "Commands/autoNothing.h"
 #include "Commands/MecanumSaucerDrive.h"
 #include "Commands/ForkRaise.h"
 #include "Commands/ExampleCommand.h"
 #include "Commands/MyAutoCommand.h"
-#include "Commands/GrabLeft.h"//FIXME remove after test
+#include "Commands/GrabLeft.h"
+#include "Commands/GrabRight.h"
 #include <ctre/Phoenix.h>
-#include <ADIS16448_IMU.h>
+#include "ADIS16448_IMU.h"
 
 #include "OI.h"
 
@@ -29,23 +31,17 @@ private:
 	// Have it null by default so that if testing teleop it
 	// doesn't have undefined behavior and potentially crash.
 	// The following are based on the WPILib example
-	frc::Command* m_autonomousCommand = nullptr;
-	frc::Command* m_teleopCommand = nullptr;
 
-	// The following were copied from 2017 code base
-	SendableChooser<Command*> *drivemodechooser;
-	SendableChooser<Command*> *autonomouschooser;
 	Command *autonomousCommand = nullptr;
 	Command *teleopCommand = nullptr;
 	Command *fork = nullptr;
-	ADIS16448_IMU *imu; // Inertial Management Unit
 
-	ExampleCommand m_defaultAuto;
-	MyAutoCommand m_myAuto;
-	frc::SendableChooser<frc::Command*> m_chooser;
+	SendableChooser<Command*> *autochooser;
+	SendableChooser<Command*> *teleopchooser;
 	Compressor *compressor;
 	bool compressorEnabled, compressorPressureSwitch;
 	double compressorCurrent;
+	ADIS16448_IMU *imu; // Inertial Management Unit
 
 public:
 
@@ -53,12 +49,25 @@ public:
 
 	void RobotInit() override
 	{
+
 		CommandBase::init(); // Borrowed from 2017 code base
 
-		m_chooser.AddDefault("Default Auto", &m_defaultAuto);
-		m_chooser.AddObject("My Auto", &m_myAuto);
+		autochooser = new SendableChooser<Command*>;
+		teleopchooser = new SendableChooser<Command*>;
+		imu = new ADIS16448_IMU(); // Instantiate before Sendable Chooser
+
+		// Autonomous Modes
+		autochooser->AddDefault("Do Nothing", new autoNothing(15));
+		autochooser->AddObject("Basic Mobility", new autoNothing(15));
+		autochooser->AddObject("Left Field Plates", new autoNothing(15));
+		autochooser->AddObject("Right Field Plates", new autoNothing(15));
+
+		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(imu));
+		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
+
 		//frc::SmartDashboard::init();
-		frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+		frc::SmartDashboard::PutData("Auto Modes", autochooser);
+		frc::SmartDashboard::PutData("Teleop Modes", teleopchooser);
 		SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
 
 		printf("Instantiating compressor object...\n");
@@ -69,11 +78,6 @@ public:
 		compressorCurrent = compressor->GetCompressorCurrent();
 		cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
 		camera.SetResolution(640, 480);
-		imu = new ADIS16448_IMU();
-		// drivemodechooser = new SendableChooser<Command*>;
-//		drivemodechooser->AddObject("Standard Tank Drive", new StandardTankDrive());
-//		drivemodechooser->AddObject("2 Joystick Mecanum", new MecanumTankDrive());
-		// drivemodechooser->AddDefault("Xbox Standard", new MecanumSaucerDrive());
 
 	}
 
@@ -106,26 +110,41 @@ public:
 	 */
 	void AutonomousInit() override
 	{
-		std::string autoSelected = frc::SmartDashboard::GetString(
-				"Auto Selector", "Default");
-		if (autoSelected == "My Auto") {
-			m_autonomousCommand = &m_myAuto;
-		} else {
-			m_autonomousCommand = &m_defaultAuto;
-		}
-
-		m_autonomousCommand = m_chooser.GetSelected();
-
-		if (m_autonomousCommand != nullptr) {
-			m_autonomousCommand->Start();
-		}
 		imu->Reset();
 		gyroAngle = 0.0;
+
+		/*
+		 * In our Left Field Command Group, do something like this:
+
+		if(gameData[0] == 'L')
+		{
+			//Put Left Near Switch code here
+		}
+		else if gameData[1] = ‘L’
+		{
+			//Put Left Scale auto code here
+		}
+		else if gameData[2] = 'L'
+		{
+			//Put Left Far Switch code here
+		}
+
+		/* Then do the same thing for the Right Field Command Group
+		 */
+		autonomousCommand = (Command *) autochooser->GetSelected();
+		if (autonomousCommand != nullptr)
+		{
+			autonomousCommand->Start();
+		}
 
 	}
 
 	void AutonomousPeriodic() override
 	{
+		std::string gameData;
+		gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+		SmartDashboard::PutString("Plate Configuration: ", gameData);
+
 		frc::Scheduler::GetInstance()->Run();
 		gyroAngle = imu->GetAngleZ();
 	}
@@ -135,23 +154,19 @@ public:
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (m_autonomousCommand != nullptr) {
-			m_autonomousCommand->Cancel();
-			m_autonomousCommand = nullptr;
+		if (autonomousCommand != nullptr)
+		{
+			autonomousCommand->Cancel();
+			autonomousCommand = nullptr;
 		}
 		// If we're offering multiple drive/controller options through sendable chooser:
 		// teleopCommand = (Command *) drivemodechooser->GetSelected();
 
-		teleopCommand = new MecanumSaucerDrive(imu);
+		teleopCommand = (Command *) teleopchooser->GetSelected();
+		// teleopCommand = new MecanumSaucerDrive(imu);
 		if (teleopCommand != nullptr)
 			teleopCommand->Start();
-		/*
-		 * FIXME Can we run a second command concurrently for forklift?
 
-		climber = new Climb();
-		if (climber != nullptr)
-			climber->Start();
-		 */
 		fork = new ForkRaise();
 		if (fork != nullptr)
 			fork->Start();

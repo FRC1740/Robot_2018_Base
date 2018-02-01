@@ -1,10 +1,9 @@
 #include "Climber.h"
-#include "../RobotMap.h"
 
-#define FWD 1.0
-#define REV -1.0
+#define CLIMB 1.0
+#define DESCEND -1.0
 
-Climber::Climber() : Subsystem("Climber")
+Climber::Climber() : frc::Subsystem("Climber")
 {
 	//a = new WPI_TalonSRX(CLIMBER_MOTOR_1_ID); // Climber Motor a FIXME restore when have two motors
 	b = new WPI_TalonSRX(CLIMBER_MOTOR_2_ID); // Climber Motor 2
@@ -25,14 +24,14 @@ void Climber::InitDefaultCommand()
 
 void Climber::Climb()
 {
-	//a->Set(FWD); FIXME two motors
-	b->Set(FWD);
+	//a->Set(CLIMB); FIXME two motors
+	b->Set(CLIMB);
 }
 
 void Climber::Descend()
 {
-	//a->Set(REV); FIXME two motors
-	b->Set(REV);
+	//a->Set(DESCEND); FIXME two motors
+	b->Set(DESCEND);
 }
 
 void Climber::Stop()
