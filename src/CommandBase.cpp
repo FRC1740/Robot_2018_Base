@@ -2,6 +2,7 @@
 #include "Commands/Scheduler.h"
 
 // Initialize a single static pointer/instance of all of your subsystems to NULL
+Climber* CommandBase::climber;
 OI* CommandBase::oi = NULL;
 DriveTrain* CommandBase::drivetrain = NULL;
 Piston*	CommandBase::piston = NULL;
@@ -17,6 +18,7 @@ CommandBase::CommandBase(): Command() {}
 void CommandBase::init()
 {
 	drivetrain = new DriveTrain();
+	climber = new Climber();
 	oi = new OI();
 //	datalogger = new DataLogger();
 	piston = new Piston();

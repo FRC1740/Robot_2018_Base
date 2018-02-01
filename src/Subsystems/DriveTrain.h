@@ -1,11 +1,11 @@
 #ifndef DriveTrain_H
 #define DriveTrain_H
 
-#include "Commands/Subsystem.h"
-#include "WPILib.h"
+#include <wpilib.h>
+#include <Commands/Subsystem.h>
 #include <ctre/Phoenix.h>
-#include "../RobotMap.h"
 #include <OI.h>
+#include "../RobotMap.h"
 
 /*
  *  xbox controller axes
@@ -17,9 +17,9 @@
 #define DRIVE_Y_AXIS 1
 #define TURN_AXIS 2
 
-#define DEADBAND .2 // Axis deadband
+#define DRIVE_DEADBAND .2 // Axis deadband
 
-class DriveTrain : public Subsystem
+class DriveTrain : public frc::Subsystem
 {
 private:
 	// It's desirable that everything possible under private except
@@ -29,18 +29,14 @@ private:
 	WPI_TalonSRX *fr; // Front Right motor
 	WPI_TalonSRX *rl; // Rear left motor
 	WPI_TalonSRX *rr; // Rear Right motor
-//	ADIS16448_IMU *imu;
-	double gyroAngle;
 	char gyroString[128];
-	bool reversed;
+	MecanumDrive *m_robotDrive;
 
 public:
-	MecanumDrive *m_robotDrive;
 	DriveTrain();
 	void InitDefaultCommand();
 	void SaucerDrive(double, double);
-	void Go(double, double, double, double); // Left X, Left Y, Twist, Gyro
-	double GetGyroAngle();
+	void Go(double, double, double, double); // Left X, Left Y, Twist, Angle
 	double Db(double); // Deadband
 };
 

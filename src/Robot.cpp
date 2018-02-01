@@ -18,9 +18,10 @@
 //#include "Commands/ExampleCommand.h"
 #include "Commands/MyAutoCommand.h"
 #include "Subsystems/ForkLifter.h"
-
-#include <ctre/Phoenix.h>
 #include <Commands/ForkMove.h>
+#include "Commands/GrabLeft.h"//FIXME remove after test
+#include <ctre/Phoenix.h>
+#include <ADIS16448_IMU.h>
 
 #include "OI.h"
 
@@ -38,6 +39,7 @@ private:
 	Command *autonomousCommand = nullptr;
 	Command *teleopCommand = nullptr;
 	Command *fork = nullptr;
+	ADIS16448_IMU *imu; // Inertial Management Unit
 
 	//ExampleCommand m_defaultAuto;
 	MyAutoCommand m_myAuto;
@@ -48,13 +50,17 @@ private:
 
 public:
 
+	double gyroAngle;
+
 	void RobotInit() override
 	{
 		CommandBase::init(); // Borrowed from 2017 code base
 
 		//m_chooser.AddDefault("Default Auto", &m_defaultAuto);
 		m_chooser.AddObject("My Auto", &m_myAuto);
+		//frc::SmartDashboard::init();
 		frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+		SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
 
 		printf("Instantiating compressor object...\n");
 		compressor = new Compressor();
@@ -62,7 +68,9 @@ public:
 		compressorEnabled = compressor->Enabled();
 		compressorPressureSwitch = compressor->GetPressureSwitchValue();
 		compressorCurrent = compressor->GetCompressorCurrent();
-
+		cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
+		camera.SetResolution(640, 480);
+		imu = new ADIS16448_IMU();
 		// drivemodechooser = new SendableChooser<Command*>;
 //		drivemodechooser->AddObject("Standard Tank Drive", new StandardTankDrive());
 //		drivemodechooser->AddObject("2 Joystick Mecanum", new MecanumTankDrive());
@@ -77,7 +85,8 @@ public:
 	 */
 	void DisabledInit() override
 	{
-
+		imu->Reset();
+		gyroAngle = 0.0;
 	}
 
 	void DisabledPeriodic() override
@@ -111,11 +120,15 @@ public:
 		if (m_autonomousCommand != nullptr) {
 			m_autonomousCommand->Start();
 		}
+		imu->Reset();
+		gyroAngle = 0.0;
+
 	}
 
 	void AutonomousPeriodic() override
 	{
 		frc::Scheduler::GetInstance()->Run();
+		gyroAngle = imu->GetAngleZ();
 	}
 
 	void TeleopInit() override {
@@ -130,7 +143,7 @@ public:
 		// If we're offering multiple drive/controller options through sendable chooser:
 		// teleopCommand = (Command *) drivemodechooser->GetSelected();
 
-		teleopCommand = new MecanumSaucerDrive();
+		teleopCommand = new MecanumSaucerDrive(imu);
 		if (teleopCommand != nullptr)
 			teleopCommand->Start();
 		/*
@@ -144,13 +157,16 @@ public:
 		if (fork != nullptr)
 			fork->Start();
 
+		imu->Reset();
+		gyroAngle = 0.0;
 	}
 
 	void TeleopPeriodic() override
 	{
+		gyroAngle = imu->GetAngleZ();
 		frc::Scheduler::GetInstance()->Run();
 		// -------------> Not working ---->SmartDashboard::PutNumber("Joystick X value", oi->extendBtn->Get());
-		// SmartDashboard::PutNumber("Joystick X value", oi->extendBtn->Get());
+		//sd->PutNumber("Joystick X value", oi->extendBtn->Get());
 		SmartDashboard::PutBoolean("Compressor: ",compressor->Enabled());
 		SmartDashboard::PutBoolean("Pressure Switch: ", compressor->GetPressureSwitchValue());
 		SmartDashboard::PutNumber("Compressor Current: ", compressorCurrent = compressor->GetCompressorCurrent());

@@ -31,6 +31,8 @@ public:
 	JoystickButton *lBumper;
 	JoystickButton *rBumper;
 	JoystickButton *xboxXBtn;
+	JoystickButton *xboxYBtn;
+	JoystickButton *xboxBackBtn;
 
 	// Co-Driver - NES Controller
 	Joystick *NESController;

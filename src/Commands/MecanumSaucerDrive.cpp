@@ -1,17 +1,18 @@
 #include "MecanumSaucerDrive.h"
 #include <math.h>
 
-MecanumSaucerDrive::MecanumSaucerDrive()
+MecanumSaucerDrive::MecanumSaucerDrive(ADIS16448_IMU *imu)
 {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
 	Requires(drivetrain);
+	gyro = imu;
+	gyro_angle = 0.0;
 }
 
 // Called just before this Command runs the first time
 void MecanumSaucerDrive::Initialize()
 {
-
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -30,12 +31,17 @@ void MecanumSaucerDrive::Execute()
 	// Get input from OI TURN joystick
 	double twistOI = this->GetTwist(); // Right stick, x axis
 
+	if (oi->xboxBackBtn->Get())
+		gyro->Reset();
+
+	gyro_angle = gyro->GetAngleZ();
 
 	// Combine TURN magnitude with MOVE magnitude
 
 
 	// Engage!!!
-	drivetrain->Go(xOI, yOI, twistOI, 0.0); // FIXME: Fourth argument is Gyro Angle (optional)
+	// Fourth argument is Saucer Angle which is the negative of the gyro angle.
+	drivetrain->Go(xOI, yOI, twistOI, -gyro_angle);
 
 }
 
@@ -72,3 +78,4 @@ double MecanumSaucerDrive::GetTwist()
 {
 	return oi->xboxController->GetRawAxis(4); // Right stick, X axis
 }
+

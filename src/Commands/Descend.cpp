@@ -1,37 +1,32 @@
-#include "PistonExtend.h"
+#include "Descend.h"
 
-PistonExtend::PistonExtend()
-{
+Descend::Descend() {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
-	Requires(piston);
 }
 
 // Called just before this Command runs the first time
-void PistonExtend::Initialize()
-{
-	// This is where we can extend the piston
-	piston->Toggle();
+void Descend::Initialize() {
+
 }
 
 // Called repeatedly when this Command is scheduled to run
-void PistonExtend::Execute()
-{
+void Descend::Execute() {
+
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool PistonExtend::IsFinished()
-{
-	return true;
+bool Descend::IsFinished() {
+	return false;
 }
 
 // Called once after isFinished returns true
-void PistonExtend::End()
-{
+void Descend::End() {
+
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void PistonExtend::Interrupted()
-{
+void Descend::Interrupted() {
+
 }
