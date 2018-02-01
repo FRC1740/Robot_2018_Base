@@ -3,10 +3,10 @@
 #define TRIGGER_DEADBAND 0.1
 #include "../CommandBase.h"
 
-class ForkRaise : public CommandBase
+class ForkMove : public CommandBase
 {
 public:
-	ForkRaise();
+	ForkMove();
 	void Initialize();
 	void Execute();
 	bool IsFinished();

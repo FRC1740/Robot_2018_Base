@@ -15,12 +15,12 @@
 #include <TimedRobot.h>
 
 #include "Commands/MecanumSaucerDrive.h"
-#include "Commands/ForkRaise.h"
-#include "Commands/ExampleCommand.h"
+//#include "Commands/ExampleCommand.h"
 #include "Commands/MyAutoCommand.h"
 #include "Subsystems/ForkLifter.h"
 
 #include <ctre/Phoenix.h>
+#include <Commands/ForkMove.h>
 
 #include "OI.h"
 
@@ -39,7 +39,7 @@ private:
 	Command *teleopCommand = nullptr;
 	Command *fork = nullptr;
 
-	ExampleCommand m_defaultAuto;
+	//ExampleCommand m_defaultAuto;
 	MyAutoCommand m_myAuto;
 	frc::SendableChooser<frc::Command*> m_chooser;
 	Compressor *compressor;
@@ -52,7 +52,7 @@ public:
 	{
 		CommandBase::init(); // Borrowed from 2017 code base
 
-		m_chooser.AddDefault("Default Auto", &m_defaultAuto);
+		//m_chooser.AddDefault("Default Auto", &m_defaultAuto);
 		m_chooser.AddObject("My Auto", &m_myAuto);
 		frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
@@ -103,7 +103,7 @@ public:
 		if (autoSelected == "My Auto") {
 			m_autonomousCommand = &m_myAuto;
 		} else {
-			m_autonomousCommand = &m_defaultAuto;
+			//m_autonomousCommand = &m_defaultAuto;
 		}
 
 		m_autonomousCommand = m_chooser.GetSelected();
@@ -140,7 +140,7 @@ public:
 		if (climber != nullptr)
 			climber->Start();
 		 */
-		fork = new ForkRaise();
+		fork = new ForkMove();
 		if (fork != nullptr)
 			fork->Start();
 
