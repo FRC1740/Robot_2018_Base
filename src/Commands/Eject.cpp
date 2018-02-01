@@ -1,37 +1,39 @@
-#include "PistonExtend.h"
+#include "Eject.h"
 
-PistonExtend::PistonExtend()
+Eject::Eject()
 {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
-	Requires(piston);
+	Requires(grabbarms);
 }
 
 // Called just before this Command runs the first time
-void PistonExtend::Initialize()
+void Eject::Initialize()
 {
-	// This is where we can extend the piston
-	piston->Toggle();
+
 }
 
 // Called repeatedly when this Command is scheduled to run
-void PistonExtend::Execute()
+void Eject::Execute()
 {
+	grabbarms->Eject();
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool PistonExtend::IsFinished()
+bool Eject::IsFinished()
 {
-	return true;
+	return false;
 }
 
 // Called once after isFinished returns true
-void PistonExtend::End()
+void Eject::End()
 {
+	grabbarms->AllStop();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void PistonExtend::Interrupted()
+void Eject::Interrupted()
 {
+	grabbarms->AllStop();
 }

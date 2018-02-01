@@ -6,26 +6,28 @@
 /*----------------------------------------------------------------------------*/
 
 #include <Buttons/JoystickButton.h>
-//#include <Commands/Eject.h>
-#include <Commands/GearLight.h>
-//#include <Commands/GrabLeft.h>
-//#include <Commands/GrabRight.h>
-#include <Commands/PistonExtend.h>
-#include <Commands/PistonRetract.h>
 #include <Joystick.h>
 #include <OI.h>
+#include <Commands/Eject.h>
+#include <Commands/GearLight.h>
+#include <Commands/GrabLeft.h>
+#include <Commands/GrabRight.h>
+#include <Commands/PistonExtend.h>
+#include <Commands/PistonRetract.h>
+#include <Commands/Climb.h>
+#include <Commands/Descend.h>
 
 /* ****
  *
  * 	xBox Controller button mapping:
- * 	Button 1 - A
- * 	Button 2 - B
- * 	Button 3 - X
- * 	Button 4 - Y
- * 	Button 5 - Left Bumper
- * 	Button 6 - Right Bumper
- * 	Button 7 - Back
- * 	Button 8 - Start
+ * 	Button 1 - A - Descend
+ * 	Button 2 - B - Climb
+ * 	Button 3 - X - Eject
+ * 	Button 4 - Y - Gyro Reset
+ * 	Button 5 - Left Bumper - Grab Left
+ * 	Button 6 - Right Bumper - Grab Right
+ * 	Button 7 - Back - Piston
+ * 	Button 8 - Start - Piston
  * 	Button 9 - Left Stick
  * 	Button 10 - Right Stick
  */
@@ -35,8 +37,8 @@ OI::OI() {
 	// Driver Station USB slot 4: Xbox controller
 	xboxController = new Joystick(4);
 	// Green light from SteamWorks "Gear Ready"
-	// gearLightBtn = new JoystickButton(xboxController, 1);
-	// gearLightBtn->WhileHeld(new GearLight);
+	gearLightBtn = new JoystickButton(xboxController, 9); // Left Stick
+	gearLightBtn->WhileHeld(new GearLight);
 
 	// Piston Extend & Retract buttons
 	extendBtn = new JoystickButton(xboxController, 7);
@@ -56,9 +58,14 @@ OI::OI() {
 
 	// Climb & Descend
 	xboxABtn = new JoystickButton(xboxController, 2);
-	xboxABtn->WhileHeld(new GearLight); // FIXME: replace with WhileHeld(new Climb) command
+	xboxABtn->WhileHeld(new Climb); // FIXME: replace with WhileHeld(new Climb) command
 	xboxBBtn = new JoystickButton(xboxController, 1);
-	xboxBBtn->WhileHeld(new GearLight); // FIXME: replace with WhileHeld(new Descend) command
+	xboxBBtn->WhileHeld(new Descend); // FIXME: replace with WhileHeld(new Descend) command
+
+	xboxYBtn = new JoystickButton(xboxController, 4);
+	xboxYBtn->WhenPressed(new PistonExtend);
+
+	xboxBackBtn = new JoystickButton(xboxController, 7);
 
 	// ForkLift Raise & Lower utilize AXES 2 & 3 (Left & Right Triggers)
 

@@ -1,19 +1,27 @@
 #include "Piston.h"
 
-Piston::Piston() : Subsystem("Piston")
+Piston::Piston() : frc::Subsystem("Piston")
 {
 	s = new DoubleSolenoid(CYLINDER_PORT0, CYLINDER_PORT1);
-	isOpen = true;
+	isExtended = false;
 }
 
 void Piston::Extend()
 {
 	s->Set(DoubleSolenoid::Value::kForward);
-	isOpen = true;
+	isExtended = true;
 }
 
 void Piston::Retract()
 {
-	isOpen = false;
+	isExtended = false;
 	s->Set(DoubleSolenoid::Value::kReverse);
+}
+
+void Piston::Toggle()
+{
+	if (isExtended)
+		Retract();
+	else
+		Extend();
 }
