@@ -53,7 +53,6 @@ OI::OI() {
 	JoystickButton *pistonBtn = xboxYBtn;
 
 	lBumper = new JoystickButton(xboxController, 5);
-<<<<<<< HEAD
 	JoystickButton *grabLBtn = lBumper;
 	rBumper = new JoystickButton(xboxController, 6);
 	JoystickButton *grabRBtn = rBumper;
@@ -63,16 +62,6 @@ OI::OI() {
 
 	xboxSetupBtn = new JoystickButton(xboxController, 8);
 	JoystickButton *linearRetractBtn = xboxSetupBtn;
-
-=======
-	//lBumper->WhileHeld(new GrabLeft); // FIXME: replace WhileHeld(new GrabLeft) command
-	rBumper = new JoystickButton(xboxController, 6);
-	//rBumper->WhileHeld(new GrabRight); // FIXME: replace with WhenHeld(new GrabRight) command
-
-	// PowerCube Eject
-	xboxXBtn = new JoystickButton(xboxController, 3);
-	//xboxXBtn->WhileHeld(new Eject); // FIXME: Replace with WhileHeld(new Eject) command
->>>>>>> 1b5c6ee682d43a7b976bd49d7dd07efb073d4ad0
 
 	// Climb & Descend
 	descendBtn->WhileHeld(new Descend);
@@ -95,6 +84,6 @@ OI::OI() {
 	// ForkLift Raise & Lower utilize AXES 2 & 3 (Left & Right Triggers)
 
 	// Initialize the Co-Driver's controller in USB slot 5
-	// NESController = new Joystick(5); // FIXME: Add NES Controller inputs & commands
+	NESController = new Joystick(5); // FIXME: Add NES Controller inputs & commands
 
 }

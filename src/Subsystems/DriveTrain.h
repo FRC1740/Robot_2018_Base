@@ -1,9 +1,9 @@
 #ifndef DriveTrain_H
 #define DriveTrain_H
 
-#include <wpilib.h>
-#include <Commands/Subsystem.h>
 #include <ctre/Phoenix.h>
+#include <WPILib.h>
+#include <Commands/Subsystem.h>
 #include <OI.h>
 #include "../RobotMap.h"
 

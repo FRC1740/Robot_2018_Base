@@ -15,7 +15,7 @@ public:
 	Joystick *xboxController;
 
 	// Map buttons for turning in gear light
-	JoystickButton *gearLightBtn;
+	// JoystickButton *gearLightBtn;
 
 	// Linear Actuator
 	// JoystickButton *extendBtn;
