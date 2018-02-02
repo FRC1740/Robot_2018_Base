@@ -1,7 +1,6 @@
 ### FRC 1740 Programming Team To Do List
 ___
 
-* 
 * TODO - IL - HI - Increase Fork Trigger Deadband
 * TODO - IL - HI - Obtain/Research forklift Encoder and build &quot;GO TO LEVEL&quot; functionality
 * TODO - RP - HI - Research &quot;PID Subsystem&quot; for possible use on Forklift &amp; auto drive

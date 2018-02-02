@@ -18,31 +18,16 @@ void MecanumSaucerDrive::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void MecanumSaucerDrive::Execute()
 {
-	// Get input from OI MOVE - xbox LEFT joystick
-	double xOI = this->GetX();
-	double yOI = -this->GetY(); // Invert Y axis (stick forward is negative)
-
-
-	// Convert X/Y inputs to angle/magnitude
-	double angle = atan(yOI/xOI);
-	double magnitude = sqrt(xOI*xOI + yOI*yOI);
-
-
-	// Get input from OI TURN joystick
-	double twistOI = this->GetTwist(); // Right stick, x axis
-
-	if (oi->xboxBackBtn->Get())
-		gyro->Reset();
-
-	gyro_angle = gyro->GetAngleZ();
-
-	// Combine TURN magnitude with MOVE magnitude
-
-
+	if (gyro != nullptr)
+	{
+		if (oi->xboxBackBtn->Get())
+			gyro->Reset();
+		else
+			gyro_angle = gyro->GetAngleZ();
+	}
 	// Engage!!!
 	// Fourth argument is Saucer Angle which is the negative of the gyro angle.
-	drivetrain->Go(xOI, yOI, twistOI, -gyro_angle);
-
+	drivetrain->Go(this->GetX(), this->GetInvertedY(), this->GetTwist(), -gyro_angle);
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -72,6 +57,11 @@ double MecanumSaucerDrive::GetX()
 double MecanumSaucerDrive::GetY()
 {
 	return oi->xboxController->GetRawAxis(1); // Left Stick, Y axis
+}
+
+double MecanumSaucerDrive::GetInvertedY()
+{
+	return -oi->xboxController->GetRawAxis(1); // Left Stick, Y axis, Inverted
 }
 
 double MecanumSaucerDrive::GetTwist()
