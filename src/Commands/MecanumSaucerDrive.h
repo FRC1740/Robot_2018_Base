@@ -13,6 +13,9 @@
 #define DEADBAND_TWIST .3
 
 class MecanumSaucerDrive : public CommandBase {
+private:
+	ADIS16448_IMU *gyro;
+	double gyro_angle;
 public:
 	MecanumSaucerDrive(ADIS16448_IMU *);
 	void Initialize();
@@ -22,9 +25,8 @@ public:
 	void Interrupted();
 	double GetX();
 	double GetY();
+	double GetInvertedY(); // Negative of GetY()
 	double GetTwist();
-	ADIS16448_IMU *gyro;
-	double gyro_angle;
 };
 
 #endif  // MecanumSaucerDrive_H

@@ -45,7 +45,7 @@ void DriveTrain::SaucerDrive(double angle, double magnitude)
 void DriveTrain::Go(double x, double y, double twist, double angle)
 {
 	//std::cout << "Angle : " << angle << std::endl;
-	printf("XBoxDrive::Execute() angle = %d\n", (int)angle%360);
+	// printf("XBoxDrive::Execute() angle = %d\n", (int)angle%360);
 	sprintf(gyroString, "%d degrees", (int)angle%360);
 	SmartDashboard::PutString("Saucer Angle: ", gyroString);
 

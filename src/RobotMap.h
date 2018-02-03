@@ -38,6 +38,12 @@
 #define CLIMBER_MOTOR_2_ID 8
 #define POWERCUBE_LIFTER_ID 9
 
+// Encoder DIO Ports
+#define FORKLIFT_MOTOR_ENCODER_CHANNEL_A 0
+#define FORKLIFT_MOTOR_ENCODER_CHANNEL_B 1
+#define CLIMBER_MOTOR_ENCODER_CHANNEL_A 2
+#define CLIMBER_MOTOR_ENCODER_CHANNEL_B 3
+
 // If you are using multiple modules, make sure to define both the port
 // number and the module. For example you with a rangefinder:
 // constexpr int kRangeFinderPort = 1;

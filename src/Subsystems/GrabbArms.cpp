@@ -1,5 +1,5 @@
-#include "GrabbArms.h"
 #include "../RobotMap.h"
+#include "GrabbArms.h"
 #define OUT 1.0 //FIXME direction of motors
 #define IN -1.0
 

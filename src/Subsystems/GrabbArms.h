@@ -1,8 +1,9 @@
 #ifndef GrabbArms_H
 #define GrabbArms_H
-#include <Commands/Subsystem.h>
+#include <WPILib.h>
 #include <ctre/Phoenix.h>
-#include "WPILib.h"
+#include <Commands/Subsystem.h>
+
 
 class GrabbArms : public Subsystem
 {
