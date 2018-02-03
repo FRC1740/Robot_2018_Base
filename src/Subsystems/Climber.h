@@ -13,6 +13,8 @@ private:
 	// for methods that implement subsystem capabilities
 	//WPI_TalonSRX *a; // Climber Motor 1 FIXME two motors
 	WPI_TalonSRX *b; // Climber Motor 2
+	Encoder *enc;
+	int EncoderValue;
 
 public:
 	Climber();
@@ -20,6 +22,7 @@ public:
 	void Climb();
 	void Descend();
 	void Stop();
+	int ReadEncoder();
 };
 
 #endif  // Climber_H
