@@ -30,14 +30,15 @@ void Climber::InitDefaultCommand()
 void Climber::Climb()
 {
 	//a->Set(FWD); FIXME two motors
-	b->Set(FWD);
+	b->Set(CLIMB);
 	EncoderValue = enc->Get();
 	SmartDashboard::PutNumber("Climber Encoder: ", EncoderValue);
+}
 
 void Climber::Descend()
 {
 	//a->Set(REV); FIXME two motors
-	b->Set(REV);
+	b->Set(DESCEND);
 	EncoderValue = enc->Get();
 	SmartDashboard::PutNumber("Climber Encoder: ", EncoderValue);
 }
