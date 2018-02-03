@@ -1,6 +1,6 @@
 #ifndef ForkRaise_H
 #define ForkRaise_H
-#define TRIGGER_DEADBAND 0.1
+#define TRIGGER_DEADBAND 0.2
 #include "../CommandBase.h"
 
 class ForkMove : public CommandBase
@@ -14,6 +14,7 @@ public:
 	void Interrupted();
 	double GetRightTrig();
 	double GetLeftTrig();
+	void GoToGround();
 	};
 
 #endif  // ForkRaise_H

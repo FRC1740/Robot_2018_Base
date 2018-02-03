@@ -13,6 +13,7 @@ ForkLifter::ForkLifter() : frc::Subsystem("ForkLifter")
 	//enc->SetReverseDirection(true);
 	//enc->SetSamplesToAverage(7);
 	EncoderValue = 0;
+	enc->Reset();
 }
 
 void ForkLifter::InitDefaultCommand()
@@ -27,14 +28,14 @@ void ForkLifter::Raise(double speed)
 {
 	lm->Set(ApplyDeadband(speed));
 	EncoderValue = enc->Get();
-	SmartDashboard::PutNumber("Encoder Value: ", EncoderValue);
+	SmartDashboard::PutNumber("ForkLifter Encoder: ", EncoderValue);
 }
 
 void ForkLifter::Lower(double speed)
 {
 	lm->Set(ApplyDeadband(-speed));
 	EncoderValue = enc->Get();
-	SmartDashboard::PutNumber("Encoder Value: ", EncoderValue);
+	SmartDashboard::PutNumber("ForkLifter Encoder: ", EncoderValue);
 }
 
 void ForkLifter::Stop()
@@ -62,3 +63,4 @@ double ForkLifter::ApplyDeadband(double TrgAmnt)
 		return 0.0;
 	}
 }
+
