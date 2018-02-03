@@ -56,6 +56,10 @@ void DriveTrain::Go(double x, double y, double twist, double angle)
 //		gyro.Reset();
 }
 
+void DriveTrain::Stop()
+{
+	m_robotDrive->StopMotor();
+}
 
 /** @return deadband */
 double DriveTrain::Db(double axisVal)

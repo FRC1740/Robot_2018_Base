@@ -37,6 +37,7 @@ public:
 	void InitDefaultCommand();
 	void SaucerDrive(double, double);
 	void Go(double, double, double, double); // Left X, Left Y, Twist, Angle
+	void Stop(); // All Stop
 	double Db(double); // Deadband
 };
 

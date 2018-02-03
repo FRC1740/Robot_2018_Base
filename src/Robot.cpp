@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 #include "Commandbase.h"
+#include <string.h>
 #include <WPILib.h>
 #include <Commands/Command.h>
 #include <Commands/Scheduler.h>
@@ -15,17 +16,20 @@
 #include <TimedRobot.h>
 
 #include "Commands/autoNothing.h"
-#include "Commands/MecanumSaucerDrive.h"
-//#include "Commands/ExampleCommand.h"
-#include "Commands/MyAutoCommand.h"
+#include "Commands/autoTimedMove.h"
 #include "Commands/GrabLeft.h"
-#include "Commands/GrabRight.h"
+//#include "Commands/GrabRight.h"
+
 // #include "Subsystems/ForkLifter.h"
 #include "Commands/ForkMove.h"
 #include <ctre/Phoenix.h>
 #include "ADIS16448_IMU.h"
 
 #include "OI.h"
+
+#ifndef ROBOT_VERSION_STRING
+#define ROBOT_VERSION_STRING "Undefined Version"
+#endif
 
 class Robot : public frc::TimedRobot {
 private:
@@ -59,17 +63,18 @@ public:
 
 		// Autonomous Modes
 		autochooser->AddDefault("Do Nothing", new autoNothing(15));
-		autochooser->AddObject("Basic Mobility", new autoNothing(15));
+		autochooser->AddObject("Basic Mobility", new autoTimedMove(5));
 		autochooser->AddObject("Left Field Plates", new autoNothing(15));
 		autochooser->AddObject("Right Field Plates", new autoNothing(15));
 
 		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(imu));
 		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
 
-		//frc::SmartDashboard::init();
-		frc::SmartDashboard::PutData("Auto Modes", autochooser);
-		frc::SmartDashboard::PutData("Teleop Modes", teleopchooser);
-		SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
+		//SmartDashboard::init();
+		SmartDashboard::PutData("Auto Modes", autochooser);
+		SmartDashboard::PutData("Teleop Modes", teleopchooser);
+		// SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
+		SmartDashboard::PutString("Build Version: ", ROBOT_VERSION_STRING);
 
 		printf("Instantiating compressor object...\n");
 		compressor = new Compressor();
@@ -114,24 +119,6 @@ public:
 		imu->Reset();
 		gyroAngle = 0.0;
 
-		/*
-		 * In our Left Field Command Group, do something like this:
-
-		if(gameData[0] == 'L')
-		{
-			//Put Left Near Switch code here
-		}
-		else if gameData[1] = ‘L’
-		{
-			//Put Left Scale auto code here
-		}
-		else if gameData[2] = 'L'
-		{
-			//Put Left Far Switch code here
-		}
-
-		/* Then do the same thing for the Right Field Command Group
-		 */
 		autonomousCommand = (Command *) autochooser->GetSelected();
 		if (autonomousCommand != nullptr)
 		{

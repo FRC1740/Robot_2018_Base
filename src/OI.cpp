@@ -47,7 +47,7 @@ OI::OI() {
 	JoystickButton *descendBtn = xboxBBtn;
 
 	xboxXBtn = new JoystickButton(xboxController, 3);
-	JoystickButton *eject = xboxXBtn;
+	//JoystickButton *eject = xboxXBtn;
 
 	xboxYBtn = new JoystickButton(xboxController, 4);
 	JoystickButton *pistonBtn = xboxYBtn;
@@ -55,7 +55,7 @@ OI::OI() {
 	lBumper = new JoystickButton(xboxController, 5);
 	JoystickButton *grabLBtn = lBumper;
 	rBumper = new JoystickButton(xboxController, 6);
-	JoystickButton *grabRBtn = rBumper;
+	//JoystickButton *grabRBtn = rBumper;
 
 	xboxBackBtn = new JoystickButton(xboxController, 7);
 	JoystickButton *linearExtendBtn = xboxBackBtn;
@@ -68,14 +68,14 @@ OI::OI() {
 	climbBtn->WhileHeld(new Climb);
 
 	// PowerCube Eject
-	eject->WhileHeld(new Eject);
+	//eject->WhileHeld(new Eject);
 
 	// Piston Extend & Retract is a "Y-Toggle"
 	pistonBtn->WhenPressed(new PistonExtend); // FIXME: Rename class? actually toggles extend/retract
 
 	// PowerCube Grab
 	grabLBtn->WhileHeld(new GrabLeft);
-	grabRBtn->WhileHeld(new GrabRight);
+	//grabRBtn->WhileHeld(new GrabRight);
 
 	// Linear Actuator Extend & Retract (Manual) Back/Setup buttons
 	linearExtendBtn->WhileHeld(new GearLight(false));

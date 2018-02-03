@@ -6,7 +6,7 @@
 /*----------------------------------------------------------------------------*/
 #pragma once
 
-#include <WPILIB.h>
+#include <WPILib.h>
 
 class OI {
 public:
