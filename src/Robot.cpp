@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commandbase.h"
+#include "CommandBase.h"
 #include <string.h>
 #include <WPILib.h>
 #include <Commands/Command.h>
@@ -17,9 +17,9 @@
 
 #include "Commands/autoNothing.h"
 #include "Commands/autoTimedMove.h"
-#include "Commands/MecanumSaucerDrive.h"
-// #include "Commands/GrabLeft.h"
-// #include "Commands/GrabRight.h"
+#include "Commands/GrabLeft.h"
+//#include "Commands/GrabRight.h"
+
 // #include "Subsystems/ForkLifter.h"
 #include "Commands/ForkMove.h"
 #include <ctre/Phoenix.h>
@@ -27,9 +27,8 @@
 
 #include "OI.h"
 
-#ifndef ROBOT_VERSION_STRING
-#define ROBOT_VERSION_STRING "Undefined Version"
-#endif
+//On error, create env.h from env-default.h and modify ROBOT_VERSION_STRING
+#include "env.h"
 
 class Robot : public frc::TimedRobot {
 private:
@@ -84,7 +83,6 @@ public:
 		compressorCurrent = compressor->GetCompressorCurrent();
 		cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
 		camera.SetResolution(640, 480);
-
 	}
 
 	/**
