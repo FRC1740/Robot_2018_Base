@@ -60,8 +60,8 @@ OI::OI() {
 	xboxBackBtn = new JoystickButton(xboxController, 7);
 	JoystickButton *linearExtendBtn = xboxBackBtn;
 
-	xboxSetupBtn = new JoystickButton(xboxController, 8);
-	JoystickButton *linearRetractBtn = xboxSetupBtn;
+	//xboxSetupBtn = new JoystickButton(xboxController, 8);
+	//JoystickButton *linearRetractBtn = xboxSetupBtn;
 
 	// Climb & Descend
 	descendBtn->WhileHeld(new Descend);
@@ -79,7 +79,7 @@ OI::OI() {
 
 	// Linear Actuator Extend & Retract (Manual) Back/Setup buttons
 	linearExtendBtn->WhileHeld(new GearLight(false));
-	linearRetractBtn->WhileHeld(new GearLight(true));
+	//linearRetractBtn->WhileHeld(new GearLight(true));
 
 	// ForkLift Raise & Lower utilize AXES 2 & 3 (Left & Right Triggers)
 

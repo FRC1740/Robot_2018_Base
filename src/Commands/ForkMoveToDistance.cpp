@@ -5,7 +5,7 @@ ForkMoveToDistance::ForkMoveToDistance(double dist)
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
 	Requires(forklifter);
-	int current = forklifter->ReadEncoder();
+	//int current = forklifter->ReadEncoder();
 	target = (int)(dist * TICS_PER_INCH);
 
 }

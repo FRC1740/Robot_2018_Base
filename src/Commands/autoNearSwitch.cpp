@@ -1,4 +1,6 @@
 #include "autoNearSwitch.h"
+#include "ForkMoveToDistance.h"
+#include "autoTimedMove.h"
 
 autoNearSwitch::autoNearSwitch() {
 	// Add Commands here:
@@ -18,8 +20,9 @@ autoNearSwitch::autoNearSwitch() {
 	// a CommandGroup containing them would require both the chassis and the
 	// arm.
 
-	AddParallel(ForkMoveToDistance(3));
-	AddSequential(autoTimedMove(5));
+
+	AddSequential(new autoTimedMove(5));
+	//AddSequential(new ForkMoveToDistance(3));
 	// AddSequential(autoTurn(90));
 	// AddSequental(autoTimedMove(1));
 	// AddSequential(autoDropPowerCube);
