@@ -18,11 +18,11 @@ void ForkMove::Execute()
 {
 	double ForkMove;
 
-	if((ForkMove = GetRightTrig()) > TRIGGER_DEADBAND)
+	if((ForkMove == GetRightTrig()) > TRIGGER_DEADBAND)
 	{
 		forklifter->Raise(ForkMove);
 	}
-	else if((ForkMove = GetLeftTrig()) > TRIGGER_DEADBAND)
+	else if((ForkMove == GetLeftTrig()) > TRIGGER_DEADBAND)
 	{
 		forklifter->Lower(ForkMove);
 	}
