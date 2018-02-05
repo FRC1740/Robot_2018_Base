@@ -1,7 +1,7 @@
 #ifndef ForkMoveToDistance_H
 #define ForkMoveToDistance_H
 #define FORK_DISTANCE_DEADBAND 0.5
-#define TICS_PER_INCH 33
+#define TICS_PER_INCH 33.0 //Number of encoder tics for one inch of travel
 #define FORK_LEVEL_1 0
 #define FORK_LEVEL_2 200
 #define FORK_LEVEL_3 400
@@ -10,10 +10,10 @@
 
 class ForkMoveToDistance : public CommandBase {
 private:
-	int Target;
+	int target;
 
 public:
-	ForkMoveToDistance(int);
+	ForkMoveToDistance(double);
 	void Initialize();
 	void Execute();
 	bool IsFinished();
