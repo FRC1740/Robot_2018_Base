@@ -15,6 +15,7 @@
 #include <SmartDashboard/SmartDashboard.h>
 #include <TimedRobot.h>
 
+#include "Commands/MecanumSaucerDrive.h"
 #include "Commands/autoNothing.h"
 #include "Commands/autoTimedMove.h"
 #include "Commands/GrabLeft.h"
@@ -53,7 +54,6 @@ public:
 
 	void RobotInit() override
 	{
-
 		CommandBase::init(); // Borrowed from 2017 code base
 
 		autochooser = new SendableChooser<Command*>;
@@ -83,7 +83,7 @@ public:
 		compressorCurrent = compressor->GetCompressorCurrent();
 		cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
 		camera.SetResolution(640, 480);
-	}
+}
 
 	/**
 	 * This function is called once each time the robot enters Disabled mode.

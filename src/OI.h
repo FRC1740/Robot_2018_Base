@@ -24,21 +24,21 @@ public:
 	// Climb & Descend are Triggers (axes 2 & 3)
 
 	// Forklift Raise & Lower
-	JoystickButton *xboxABtn;
-	JoystickButton *xboxBBtn;
+	JoystickButton *xboxABtn; // Button 1
+	JoystickButton *xboxBBtn; // Button 2
 
 	// Left & Right Grabber Motors
-	JoystickButton *lBumper;
-	JoystickButton *rBumper;
+	JoystickButton *lBumper; // Button 5
+	JoystickButton *rBumper; // Button 6
 
 	// Eject PowerCube
-	JoystickButton *xboxXBtn;
+	JoystickButton *xboxXBtn; // Button 3
 
 	// Toggle Pneumatic Piston
-	JoystickButton *xboxYBtn;
+	JoystickButton *xboxYBtn; // Button 4
 
 	// Linear Actuator
-	JoystickButton *xboxBackBtn;
+	JoystickButton *xboxBackBtn; // Button 7
 	JoystickButton *xboxSetupBtn;
 
 	// Co-Driver - NES Controller

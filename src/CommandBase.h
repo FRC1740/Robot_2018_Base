@@ -6,6 +6,7 @@
 #include "OI.h"
 #include "WPILib.h"
 #include "Subsystems/ForkLifter.h"
+#include "Subsystems/Elevator.h"
 #include "Subsystems/Utility.h"
 #include "Subsystems/Piston.h"
 #include "Subsystems/DriveTrain.h"
@@ -32,6 +33,7 @@ public:
 	static Climber *climber;
 	static OI *oi;
 	static ForkLifter *forklifter;
+	static Elevator *PIDelevator;
 	static Piston *piston;
 	static DriveTrain *drivetrain;
 	static GrabbArms *grabbarms;
