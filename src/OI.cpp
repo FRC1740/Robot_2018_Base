@@ -41,10 +41,10 @@ OI::OI() {
 	// gearLightBtn->WhileHeld(new GearLight);
 
 	// xBox Button Mapping
-	xboxBBtn = new JoystickButton(xboxController, 1);
-	xboxABtn = new JoystickButton(xboxController, 2);
-	JoystickButton *climbBtn = xboxABtn;
-	JoystickButton *descendBtn = xboxBBtn;
+	xboxABtn = new JoystickButton(xboxController, 1);
+	xboxBBtn = new JoystickButton(xboxController, 2);
+	JoystickButton *climbBtn = xboxBBtn;
+	JoystickButton *descendBtn = xboxABtn;
 
 	xboxXBtn = new JoystickButton(xboxController, 3);
 	//JoystickButton *eject = xboxXBtn;
