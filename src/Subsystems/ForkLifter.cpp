@@ -1,7 +1,10 @@
 #include "ForkLifter.h"
 
+<<<<<<< HEAD
 //#define FORK_ENCODER_A_CHANNEL 0
 //#define FORK_ENCODER_B_CHANNEL 1
+=======
+>>>>>>> 7200e0b8acd5b3e782b402b0717df6cea3549a10
 
 ForkLifter::ForkLifter() : frc::Subsystem("ForkLifter")
 {
@@ -13,6 +16,7 @@ ForkLifter::ForkLifter() : frc::Subsystem("ForkLifter")
 	//enc->SetReverseDirection(true);
 	//enc->SetSamplesToAverage(7);
 	EncoderValue = 0;
+	enc->Reset();
 }
 
 void ForkLifter::InitDefaultCommand()
@@ -27,14 +31,14 @@ void ForkLifter::Raise(double speed)
 {
 	lm->Set(ApplyDeadband(speed));
 	EncoderValue = enc->Get();
-	SmartDashboard::PutNumber("Encoder Value: ", EncoderValue);
+	SmartDashboard::PutNumber("ForkLifter Encoder: ", EncoderValue);
 }
 
 void ForkLifter::Lower(double speed)
 {
 	lm->Set(ApplyDeadband(-speed));
 	EncoderValue = enc->Get();
-	SmartDashboard::PutNumber("Encoder Value: ", EncoderValue);
+	SmartDashboard::PutNumber("ForkLifter Encoder: ", EncoderValue);
 }
 
 void ForkLifter::Stop()
@@ -62,3 +66,4 @@ double ForkLifter::ApplyDeadband(double TrgAmnt)
 		return 0.0;
 	}
 }
+

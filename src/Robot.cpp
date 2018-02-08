@@ -17,7 +17,9 @@
 
 #include "Commands/MecanumSaucerDrive.h"
 #include "Commands/autoNothing.h"
+#include "Commands/autoNearSwitch.h"
 #include "Commands/autoTimedMove.h"
+#include "Commands/ForkMoveToDistance.h"
 #include "Commands/GrabLeft.h"
 //#include "Commands/GrabRight.h"
 
@@ -43,9 +45,11 @@ private:
 
 	SendableChooser<Command*> *autochooser;
 	SendableChooser<Command*> *teleopchooser;
+#ifdef USE_COMPRESSOR
 	Compressor *compressor;
 	bool compressorEnabled, compressorPressureSwitch;
 	double compressorCurrent;
+#endif
 	ADIS16448_IMU *imu; // Inertial Management Unit
 
 public:
@@ -55,16 +59,16 @@ public:
 	void RobotInit() override
 	{
 		CommandBase::init(); // Borrowed from 2017 code base
+		imu = new ADIS16448_IMU(); // Instantiate before Sendable Chooser
 
 		autochooser = new SendableChooser<Command*>;
 		teleopchooser = new SendableChooser<Command*>;
-		imu = new ADIS16448_IMU(); // Instantiate before Sendable Chooser
 
 		// Autonomous Modes
 		autochooser->AddDefault("Do Nothing", new autoNothing(15));
 		autochooser->AddObject("Basic Mobility", new autoTimedMove(5));
-		autochooser->AddObject("Left Field Plates", new autoNothing(15));
-		autochooser->AddObject("Right Field Plates", new autoNothing(15));
+		autochooser->AddObject("Left Field Plates", new autoNearSwitch());
+		//autochooser->AddObject("Right Field Plates", new autoNothing(15));
 
 		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(imu));
 		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
@@ -75,12 +79,14 @@ public:
 		// SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
 		SmartDashboard::PutString("Build Version: ", ROBOT_VERSION_STRING);
 
+#ifdef USE_COMPRESSOR
 		printf("Instantiating compressor object...\n");
 		compressor = new Compressor();
 		compressor->SetClosedLoopControl(true);
 		compressorEnabled = compressor->Enabled();
 		compressorPressureSwitch = compressor->GetPressureSwitchValue();
 		compressorCurrent = compressor->GetCompressorCurrent();
+#endif
 		cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
 		camera.SetResolution(640, 480);
 }
@@ -114,9 +120,13 @@ public:
 	 */
 	void AutonomousInit() override
 	{
+		std::string gameData;
+
 		imu->Reset();
 		gyroAngle = 0.0;
 
+		gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+		SmartDashboard::PutString("Plate Configuration: ", gameData);
 		autonomousCommand = (Command *) autochooser->GetSelected();
 		if (autonomousCommand != nullptr)
 		{
@@ -127,10 +137,6 @@ public:
 
 	void AutonomousPeriodic() override
 	{
-		std::string gameData;
-		gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-		SmartDashboard::PutString("Plate Configuration: ", gameData);
-
 		frc::Scheduler::GetInstance()->Run();
 		gyroAngle = imu->GetAngleZ();
 	}
@@ -145,32 +151,30 @@ public:
 			autonomousCommand->Cancel();
 			autonomousCommand = nullptr;
 		}
-		// If we're offering multiple drive/controller options through sendable chooser:
-		// teleopCommand = (Command *) drivemodechooser->GetSelected();
 
+#ifdef USE_COMPRESSOR
+		// -------------> Not working ---->SmartDashboard::PutNumber("Joystick X value", oi->extendBtn->Get());
+		//sd->PutNumber("Joystick X value", oi->extendBtn->Get());
+		SmartDashboard::PutBoolean("Compressor: ",compressor->Enabled());
+		SmartDashboard::PutBoolean("Pressure Switch: ", compressor->GetPressureSwitchValue());
+		SmartDashboard::PutNumber("Compressor Current: ", compressorCurrent = compressor->GetCompressorCurrent());
+#endif
+		// If we're offering multiple drive/controller options through sendable chooser:
 		teleopCommand = (Command *) teleopchooser->GetSelected();
 		// teleopCommand = new MecanumSaucerDrive(imu);
+
 		if (teleopCommand != nullptr)
 			teleopCommand->Start();
 
 		fork = new ForkMove();
 		if (fork != nullptr)
 			fork->Start();
-
-		imu->Reset();
-		gyroAngle = 0.0;
 	}
 
 	void TeleopPeriodic() override
 	{
 		gyroAngle = imu->GetAngleZ();
 		frc::Scheduler::GetInstance()->Run();
-		// -------------> Not working ---->SmartDashboard::PutNumber("Joystick X value", oi->extendBtn->Get());
-		//sd->PutNumber("Joystick X value", oi->extendBtn->Get());
-		SmartDashboard::PutBoolean("Compressor: ",compressor->Enabled());
-		SmartDashboard::PutBoolean("Pressure Switch: ", compressor->GetPressureSwitchValue());
-		SmartDashboard::PutNumber("Compressor Current: ", compressorCurrent = compressor->GetCompressorCurrent());
-
 	}
 
 	void TestPeriodic() override
