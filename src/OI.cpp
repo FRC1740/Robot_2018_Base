@@ -78,7 +78,7 @@ OI::OI() {
 	//grabRBtn->WhileHeld(new GrabRight);
 
 	// Linear Actuator Extend & Retract (Manual) Back/Setup buttons
-	linearExtendBtn->WhileHeld(new GearLight(false));
+	//linearExtendBtn->WhileHeld(new GearLight(false));
 	//linearRetractBtn->WhileHeld(new GearLight(true));
 
 	// ForkLift Raise & Lower utilize AXES 2 & 3 (Left & Right Triggers)
