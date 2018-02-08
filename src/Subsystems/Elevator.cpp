@@ -42,3 +42,8 @@ void Elevator::GotoPosition(double position)
 	SetSetpoint(position);
 	Enable();
 }
+
+int Elevator::GetEncoder()
+{
+	return enc->Get();
+}

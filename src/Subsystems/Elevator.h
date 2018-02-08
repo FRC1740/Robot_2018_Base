@@ -16,6 +16,7 @@ public:
 	void UsePIDOutput(double);
 	void InitDefaultCommand();
 	void GotoPosition(double);
+	int GetEncoder();
 };
 
 #endif  // Elevator_H

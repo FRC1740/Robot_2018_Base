@@ -7,7 +7,7 @@ Climber::Climber() : frc::Subsystem("Climber")
 {
 	a = new WPI_TalonSRX(CLIMBER_MOTOR_1_ID); // Climber Motor 1
 	b = new WPI_TalonSRX(CLIMBER_MOTOR_2_ID); // Climber Motor 2
-	b->SetInverted(false); // FIXME: May have to invert the other motor
+	b->SetInverted(true); // FIXME: May have to invert the other motor
 	a->SetInverted(false); // FIXME: May have to invert the other motor
 	enc = new Encoder(2, 3);
 
