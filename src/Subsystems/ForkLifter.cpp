@@ -1,12 +1,10 @@
 #include "ForkLifter.h"
 
-#define FORK_ENCODER_A_CHANNEL 0
-#define FORK_ENCODER_B_CHANNEL 1
 
 ForkLifter::ForkLifter() : frc::Subsystem("ForkLifter")
 {
 	lm = new WPI_TalonSRX(POWERCUBE_LIFTER_ID); // Lifter motor
-	enc = new Encoder(FORK_ENCODER_A_CHANNEL, FORK_ENCODER_B_CHANNEL);
+	enc = new Encoder(FORKLIFT_MOTOR_ENCODER_CHANNEL_A, FORKLIFT_MOTOR_ENCODER_CHANNEL_B);
 	//enc->SetMaxPeriod(0.1);
 	//enc->SetMinRate(10);
 	//enc->SetDistancePerPulse(5);
