@@ -7,9 +7,9 @@ OI* CommandBase::oi = NULL;
 DriveTrain* CommandBase::drivetrain = NULL;
 Piston*	CommandBase::piston = NULL;
 Utility* CommandBase::utility = NULL;
-GrabbArms* CommandBase::grabbarms = NULL;
+// GrabbArms* CommandBase::grabbarms = NULL;
 //Camera* CommandBase::camera = NULL;
-ForkLifter* CommandBase::forklifter = NULL;
+//ForkLifter* CommandBase::forklifter = NULL;
 Elevator* CommandBase::PIDelevator = NULL;
 
 CommandBase::CommandBase(char const *name): Command(name) {}
@@ -25,7 +25,7 @@ void CommandBase::init()
 	piston = new Piston();
 //	camera = new Camera();
 	utility = new Utility();
-	forklifter = new ForkLifter();
+//	forklifter = new ForkLifter();
 	PIDelevator = new Elevator();
-	grabbarms = new GrabbArms();
+//	grabbarms = new GrabbArms();
 }

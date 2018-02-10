@@ -15,13 +15,15 @@ void GearLight::Initialize()
 void GearLight::Execute()
 {
 	// "Gear Light" was for testing purposes. This is simply a relay on the bot.
-	// utility->gearLightOn();
+	utility->gearLightOn();
+	/* FIXME: Not using a linear actuator
 	if (retract)
 		utility->linearRetract();
 	else
 		utility->linearExtend();
 
 	SmartDashboard::PutNumber("Linear Actuator Voltage: ", utility->linearGetPosition());
+	*/
 }
 
 // Make this return true when this Command no longer needs to run execute()

@@ -29,7 +29,8 @@ void Utility::linearRetract()
 }
 double Utility::linearGetPosition()
 {
-	return actuator->GetAverageVoltage();
+	// return actuator->GetAverageVoltage();
+	return 42.0;
 }
 void Utility::linearGoTo(double distance)
 {

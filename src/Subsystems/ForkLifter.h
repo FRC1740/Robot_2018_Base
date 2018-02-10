@@ -26,10 +26,6 @@ public:
 	void Stop();
 	int ReadEncoder();
 	double ApplyDeadband(double);
-
-
-
-
 };
 
 #endif  // ForkLifter_H

@@ -20,7 +20,6 @@ autoNearSwitch::autoNearSwitch() {
 	// a CommandGroup containing them would require both the chassis and the
 	// arm.
 
-
 	AddSequential(new autoTimedMove(5));
 	//AddSequential(new ForkMoveToDistance(3));
 	// AddSequential(autoTurn(90));

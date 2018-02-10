@@ -12,7 +12,7 @@ Elevator::Elevator() : PIDSubsystem("Elevator", 1.0, 0.0, 0.0)
 	//                  to
 	// Enable() - Enables the PID controller.
 	GetPIDController()->SetContinuous(false);
-	enc = new Encoder(0,1);
+	enc = new Encoder(FORKLIFT_MOTOR_ENCODER_CHANNEL_A, FORKLIFT_MOTOR_ENCODER_CHANNEL_B);
 	elevatorMotor = new WPI_TalonSRX(9);
 }
 
@@ -21,7 +21,9 @@ double Elevator::ReturnPIDInput()
 	// Return your input value for the PID loop
 	// e.g. a sensor, like a potentiometer:
 	// yourPot->SetAverageVoltage() / kYourMaxVoltage;
-	return (double)enc->Get();
+	double current = (double)enc->Get();
+	SmartDashboard::PutNumber("Powercube Height", current/TICS_PER_INCH);
+	return (double)current;
 }
 
 void Elevator::UsePIDOutput(double output)
@@ -39,11 +41,30 @@ void Elevator::InitDefaultCommand()
 
 void Elevator::GotoPosition(double position)
 {
-	SetSetpoint(position);
+	SetSetpoint(position * TICS_PER_INCH);
 	Enable();
 }
 
 int Elevator::GetEncoder()
 {
 	return enc->Get();
+}
+
+void Elevator::CancelPID()
+{
+	Disable();
+}
+
+void Elevator::Move(double speed)
+{
+	Disable();
+	elevatorMotor->Set(speed);
+}
+void Elevator::Stop()
+{
+	elevatorMotor->StopMotor();
+}
+void Elevator::GroundFloor()
+{
+	this->GotoPosition(0.0);
 }

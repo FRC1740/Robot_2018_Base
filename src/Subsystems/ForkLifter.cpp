@@ -1,11 +1,5 @@
 #include "ForkLifter.h"
 
-<<<<<<< HEAD
-//#define FORK_ENCODER_A_CHANNEL 0
-//#define FORK_ENCODER_B_CHANNEL 1
-=======
->>>>>>> 7200e0b8acd5b3e782b402b0717df6cea3549a10
-
 ForkLifter::ForkLifter() : frc::Subsystem("ForkLifter")
 {
 	lm = new WPI_TalonSRX(POWERCUBE_LIFTER_ID); // Lifter motor

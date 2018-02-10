@@ -44,16 +44,10 @@ void DriveTrain::SaucerDrive(double angle, double magnitude)
 
 void DriveTrain::Go(double x, double y, double twist, double angle)
 {
-	//std::cout << "Angle : " << angle << std::endl;
-	// printf("XBoxDrive::Execute() angle = %d\n", (int)angle%360);
-	sprintf(gyroString, "%d degrees", (int)angle%360);
-	SmartDashboard::PutString("Saucer Angle: ", gyroString);
+	SmartDashboard::PutNumber("Saucer Angle: ", (int)angle%360);
 
 	m_robotDrive->DriveCartesian(Db(x), Db(y), Db(twist), angle);
 
-	/* on button 5, reset gyro angle to zero */
-//	if(m_driveStick->GetRawButton(5))
-//		gyro.Reset();
 }
 
 void DriveTrain::Stop()

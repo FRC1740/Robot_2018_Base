@@ -9,14 +9,12 @@ Climber::Climber() : frc::Subsystem("Climber")
 	b = new WPI_TalonSRX(CLIMBER_MOTOR_2_ID); // Climber Motor 2
 	b->SetInverted(true); // FIXME: May have to invert the other motor
 	a->SetInverted(false); // FIXME: May have to invert the other motor
-	enc = new Encoder(2, 3);
+	enc = new Encoder(CLIMBER_MOTOR_ENCODER_CHANNEL_A, CLIMBER_MOTOR_ENCODER_CHANNEL_B);
 
-
-	a->Set(ControlMode::PercentOutput, 0);
-	b->Set(ControlMode::PercentOutput, 0);
+	// a->Set(ControlMode::PercentOutput, 0);
+	// b->Set(ControlMode::PercentOutput, 0);
 	EncoderValue = 0;
 	enc->Reset();
-
 
 }
 

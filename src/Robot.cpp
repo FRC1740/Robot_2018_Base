@@ -10,21 +10,21 @@
 #include <WPILib.h>
 #include <Commands/Command.h>
 #include <Commands/Scheduler.h>
-#include <LiveWindow/LiveWindow.h>
-#include <SmartDashboard/SendableChooser.h>
-#include <SmartDashboard/SmartDashboard.h>
+//#include <LiveWindow/LiveWindow.h>
+//#include <SmartDashboard/SendableChooser.h>
+//#include <SmartDashboard/SmartDashboard.h>
 #include <TimedRobot.h>
 
 #include "Commands/MecanumSaucerDrive.h"
 #include "Commands/autoNothing.h"
-#include "Commands/autoNearSwitch.h"
+//#include "Commands/autoNearSwitch.h"
 #include "Commands/autoTimedMove.h"
 #include "Commands/ForkMoveToDistance.h"
-#include "Commands/GrabLeft.h"
+// #include "Commands/GrabLeft.h"
 //#include "Commands/GrabRight.h"
 
 // #include "Subsystems/ForkLifter.h"
-#include "Commands/ForkMove.h"
+//#include "Commands/ForkMove.h"
 #include <ctre/Phoenix.h>
 #include "ADIS16448_IMU.h"
 
@@ -60,23 +60,12 @@ public:
 	{
 		CommandBase::init(); // Borrowed from 2017 code base
 		imu = new ADIS16448_IMU(); // Instantiate before Sendable Chooser
+		imu->Reset();
+		gyroAngle = 0.0;
 
 		autochooser = new SendableChooser<Command*>;
 		teleopchooser = new SendableChooser<Command*>;
 
-		// Autonomous Modes
-		autochooser->AddDefault("Do Nothing", new autoNothing(15));
-		autochooser->AddObject("Basic Mobility", new autoTimedMove(5));
-		autochooser->AddObject("Left Field Plates", new autoNearSwitch());
-		//autochooser->AddObject("Right Field Plates", new autoNothing(15));
-
-		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(imu));
-		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
-
-		//SmartDashboard::init();
-		SmartDashboard::PutData("Auto Modes", autochooser);
-		SmartDashboard::PutData("Teleop Modes", teleopchooser);
-		// SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
 		SmartDashboard::PutString("Build Version: ", ROBOT_VERSION_STRING);
 
 #ifdef USE_COMPRESSOR
@@ -98,8 +87,30 @@ public:
 	 */
 	void DisabledInit() override
 	{
-		imu->Reset();
-		gyroAngle = 0.0;
+		Preferences *prefs;
+
+		prefs = Preferences::GetInstance();
+		double mobility = prefs->GetDouble("Mobility", 2.5);
+		double kP = prefs->GetDouble("PID p constant", 1.0);
+		double kI = prefs->GetDouble("PID i constant", 0.0);
+		double kD = prefs->GetDouble("PID d constant", 0.0);
+
+		//foo = SmartDashboard::GetNumber("Mobility", 2.5);
+		// Autonomous Modes
+		autochooser->AddDefault("Do Nothing", new autoNothing(15));
+		autochooser->AddObject("Lifter Test", new ForkMoveToDistance(24.0));
+		autochooser->AddObject("Basic Mobility", new autoTimedMove(mobility));
+		// autochooser->AddObject("Left Field Plates", new autoNearSwitch());
+		//autochooser->AddObject("Right Field Plates", new autoNothing(15));
+
+		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(imu));
+		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
+
+		//SmartDashboard::init();
+		SmartDashboard::PutData("Auto Modes", autochooser);
+		SmartDashboard::PutData("Teleop Modes", teleopchooser);
+		// SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
+
 	}
 
 	void DisabledPeriodic() override
@@ -165,10 +176,11 @@ public:
 
 		if (teleopCommand != nullptr)
 			teleopCommand->Start();
-
+		/*
 		fork = new ForkMove();
 		if (fork != nullptr)
 			fork->Start();
+			*/
 	}
 
 	void TeleopPeriodic() override
