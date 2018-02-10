@@ -8,12 +8,13 @@
 #include <Buttons/JoystickButton.h>
 #include <Joystick.h>
 #include <OI.h>
-#include <Commands/Eject.h>
+// #include <Commands/Eject.h> // FIXME: No longer using grab motors
 #include <Commands/GearLight.h>
-#include <Commands/GrabLeft.h>
-#include <Commands/GrabRight.h>
-#include <Commands/PistonExtend.h>
-#include <Commands/PistonRetract.h>
+// #include <Commands/GrabLeft.h> // FIXME: No longer using grab motors
+// #include <Commands/GrabRight.h> // FIXME: No longer using grab motors
+#include <Commands/PistonExtend.h> // FIXME: PistonExtend is actually a toggle
+#include <Commands/ForkMoveToDistance.h>
+#include <Commands/PistonExtend.h> // FIXME: PistonExtend is actually a toggle
 #include <Commands/Climb.h>
 #include <Commands/Descend.h>
 
@@ -22,23 +23,20 @@
  * 	xBox Controller button mapping:
  * 	Button 1 - A - Descend
  * 	Button 2 - B - Climb
- * 	Button 3 - X - Eject
- * 	Button 4 - Y - Gyro Reset
- * 	Button 5 - Left Bumper - Grab Left
- * 	Button 6 - Right Bumper - Grab Right
- * 	Button 7 - Back - Piston
- * 	Button 8 - Start - Piston
- * 	Button 9 - Left Stick
- * 	Button 10 - Right Stick
+ * 	Button 3 - X - unused
+ * 	Button 4 - Y - Pneumatic toggle
+ * 	Button 5 - Left Bumper - unused
+ * 	Button 6 - Right Bumper - unused
+ * 	Button 7 - Back - Reset Gyro
+ * 	Button 8 - Start - Test Light
+ * 	Button 9 - Left Stick - unused
+ * 	Button 10 - Right Stick - unused
  */
 OI::OI() {
 	// Process operator interface input here.
 
 	// Driver Station USB slot 4: Xbox controller
 	xboxController = new Joystick(4);
-	// Green light from SteamWorks "Gear Ready"
-	// gearLightBtn = new JoystickButton(xboxController, 9); // Left Stick
-	// gearLightBtn->WhileHeld(new GearLight);
 
 	// xBox Button Mapping
 	xboxABtn = new JoystickButton(xboxController, 1);
@@ -53,29 +51,34 @@ OI::OI() {
 	JoystickButton *pistonBtn = xboxYBtn;
 
 	lBumper = new JoystickButton(xboxController, 5);
-	JoystickButton *grabLBtn = lBumper;
+	// JoystickButton *grabLBtn = lBumper;
 	rBumper = new JoystickButton(xboxController, 6);
 	//JoystickButton *grabRBtn = rBumper;
 
-	xboxBackBtn = new JoystickButton(xboxController, 7);
-	JoystickButton *linearExtendBtn = xboxBackBtn;
+	lBumper->WhenPressed(new ForkMoveToDistance(6.0));
+	rBumper->WhenPressed(new ForkMoveToDistance(100.0));
 
-	//xboxSetupBtn = new JoystickButton(xboxController, 8);
-	//JoystickButton *linearRetractBtn = xboxSetupBtn;
+	// The Back Button is used to reset the gyro
+	xboxBackBtn = new JoystickButton(xboxController, 7);
+	xboxSetupBtn = new JoystickButton(xboxController, 8);
+	JoystickButton *testLightBtn = xboxSetupBtn;
 
 	// Climb & Descend
 	descendBtn->WhileHeld(new Descend);
 	climbBtn->WhileHeld(new Climb);
 
-	// PowerCube Eject
-	//eject->WhileHeld(new Eject);
+	// PowerCube Eject FIXME: No more grab/eject motors
+	// eject->WhileHeld(new Eject); // FIXME: No more grab/eject motors
 
 	// Piston Extend & Retract is a "Y-Toggle"
 	pistonBtn->WhenPressed(new PistonExtend); // FIXME: Rename class? actually toggles extend/retract
 
-	// PowerCube Grab
-	grabLBtn->WhileHeld(new GrabLeft);
-	//grabRBtn->WhileHeld(new GrabRight);
+	// Green light from SteamWorks "Gear Ready"
+	testLightBtn->WhileHeld(new GearLight(false)); // FIXME: boolean argument left over from linear actuator testing
+
+	// PowerCube Grab FIXME: No more grab/eject motors
+	// grabLBtn->WhileHeld(new GrabLeft); FIXME: No more grab/eject motors
+	// grabRBtn->WhileHeld(new GrabRight); FIXME: No more grab/eject motors
 
 	// Linear Actuator Extend & Retract (Manual) Back/Setup buttons
 	//linearExtendBtn->WhileHeld(new GearLight(false));

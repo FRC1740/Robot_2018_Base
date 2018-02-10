@@ -18,6 +18,7 @@ void MecanumSaucerDrive::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void MecanumSaucerDrive::Execute()
 {
+	// Check Operator Input for manual gyro reset
 	if (gyro != nullptr)
 	{
 		if (oi->xboxBackBtn->Get())
@@ -27,6 +28,7 @@ void MecanumSaucerDrive::Execute()
 	}
 	// Engage!!!
 	// Fourth argument is Saucer Angle which is the negative of the gyro angle.
+	// If we're not using the imu (null pointer), gyro_angle remains 0.0
 	drivetrain->Go(this->GetX(), this->GetInvertedY(), this->GetTwist(), -gyro_angle);
 }
 
@@ -39,14 +41,14 @@ bool MecanumSaucerDrive::IsFinished()
 // Called once after isFinished returns true
 void MecanumSaucerDrive::End()
 {
-
+	drivetrain->Stop();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void MecanumSaucerDrive::Interrupted()
 {
-
+	drivetrain->Stop();
 }
 
 double MecanumSaucerDrive::GetX()

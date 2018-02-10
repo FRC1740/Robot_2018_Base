@@ -5,7 +5,7 @@
 #include <WPILib.h>
 #include <Commands/Subsystem.h>
 #include <OI.h>
-#include "../RobotMap.h"
+#include <RobotMap.h>
 
 /*
  *  xbox controller axes

@@ -14,8 +14,8 @@ void Piston::Extend()
 
 void Piston::Retract()
 {
-	isExtended = false;
 	s->Set(DoubleSolenoid::Value::kReverse);
+	isExtended = false;
 }
 
 void Piston::Toggle()

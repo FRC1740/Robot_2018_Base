@@ -36,5 +36,5 @@ void autoTimedMove::End()
 // subsystems is scheduled to run
 void autoTimedMove::Interrupted()
 {
-
+	drivetrain->Stop();
 }

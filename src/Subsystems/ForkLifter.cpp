@@ -1,6 +1,5 @@
 #include "ForkLifter.h"
 
-
 ForkLifter::ForkLifter() : frc::Subsystem("ForkLifter")
 {
 	lm = new WPI_TalonSRX(POWERCUBE_LIFTER_ID); // Lifter motor
