@@ -1,8 +1,9 @@
 #include "autoNearSwitch.h"
 #include "ForkMoveToDistance.h"
 #include "autoTimedMove.h"
+#include "autoTurn.h"
 
-autoNearSwitch::autoNearSwitch() {
+autoNearSwitch::autoNearSwitch(char side) {
 	// Add Commands here:
 	// e.g. AddSequential(new Command1());
 	//      AddSequential(new Command2());
@@ -19,11 +20,41 @@ autoNearSwitch::autoNearSwitch() {
 	// e.g. if Command1 requires chassis, and Command2 requires arm,
 	// a CommandGroup containing them would require both the chassis and the
 	// arm.
+	std::string gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+	double mobility = SmartDashboard::GetNumber("Mobility", 2.0);
 
-	AddSequential(new autoTimedMove(5));
-	//AddSequential(new ForkMoveToDistance(3));
-	// AddSequential(autoTurn(90));
-	// AddSequental(autoTimedMove(1));
-	// AddSequential(autoDropPowerCube);
+	AddSequential(new autoTimedMove(mobility));
+	AddSequential(new autoTurn('L'));
+	/*
+	if (gameData[0] == side)
+	{
+		// Do near switch
+		AddSequential(new autoTimedMove(mobility)); // FIXME: Change to correct timing
+		//AddParallel(new ForkMoveToDistance(SWITCH_HEIGHT));
+		AddSequential(new autoTurn('L'));
+		// AddSequential(new Eject());
+	}
+	else if (gameData[1] == side)
+	{
+		// Do Scale
+		AddSequential(new autoTimedMove(mobility * 2)); // FIXME: Change to correct timing
+		//AddParallel(new ForkMoveToDistance(SCALE_HEIGHT));
+		AddSequential(new autoTurn(side));
+		// AddSequential(new Eject());
+	}
+	else if (gameData[2] == side)
+	{
+		// Do far switch
+		AddSequential(new autoTimedMove(mobility * 3)); // FIXME: Change to correct timing
+		//AddParallel(new ForkMoveToDistance(SWITCH_HEIGHT));
+		AddSequential(new autoTurn(side));
+		// AddSequential(new Eject());
+	}
+	else
+	{
+		// Do mobility
+		AddSequential(new autoTimedMove(mobility)); // FIXME: Change to correct timing
+	}
+	*/
 
 }

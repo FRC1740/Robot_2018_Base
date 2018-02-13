@@ -10,25 +10,18 @@
 #include <WPILib.h>
 #include <Commands/Command.h>
 #include <Commands/Scheduler.h>
-//#include <LiveWindow/LiveWindow.h>
-//#include <SmartDashboard/SendableChooser.h>
-//#include <SmartDashboard/SmartDashboard.h>
 #include <TimedRobot.h>
 
 #include "Commands/MecanumSaucerDrive.h"
 #include "Commands/autoNothing.h"
-//#include "Commands/autoNearSwitch.h"
+#include "Commands/autoNearSwitch.h"
 #include "Commands/autoTimedMove.h"
+#include "Commands/autoTurn.h"
 #include "Commands/ForkMoveToDistance.h"
-// #include "Commands/GrabLeft.h"
-//#include "Commands/GrabRight.h"
 
 // #include "Subsystems/ForkLifter.h"
 //#include "Commands/ForkMove.h"
 #include <ctre/Phoenix.h>
-#include "ADIS16448_IMU.h"
-
-#include "OI.h"
 
 //On error, create env.h from env-default.h and modify ROBOT_VERSION_STRING
 #include "env.h"
@@ -41,7 +34,7 @@ private:
 
 	Command *autonomousCommand = nullptr;
 	Command *teleopCommand = nullptr;
-	Command *fork = nullptr;
+	Command *elevator = nullptr;
 
 	SendableChooser<Command*> *autochooser;
 	SendableChooser<Command*> *teleopchooser;
@@ -50,19 +43,12 @@ private:
 	bool compressorEnabled, compressorPressureSwitch;
 	double compressorCurrent;
 #endif
-	ADIS16448_IMU *imu; // Inertial Management Unit
 
 public:
-
-	double gyroAngle;
 
 	void RobotInit() override
 	{
 		CommandBase::init(); // Borrowed from 2017 code base
-		imu = new ADIS16448_IMU(); // Instantiate before Sendable Chooser
-		imu->Reset();
-		gyroAngle = 0.0;
-
 		autochooser = new SendableChooser<Command*>;
 		teleopchooser = new SendableChooser<Command*>;
 
@@ -91,19 +77,23 @@ public:
 
 		prefs = Preferences::GetInstance();
 		double mobility = prefs->GetDouble("Mobility", 2.5);
-		double kP = prefs->GetDouble("PID p constant", 1.0);
-		double kI = prefs->GetDouble("PID i constant", 0.0);
-		double kD = prefs->GetDouble("PID d constant", 0.0);
+		double rotation = prefs->GetDouble("Rotation", 90.0);
+		CommandBase::PIDelevator->PIDReset();
+		//double kP = prefs->GetDouble("PID p constant", 1.0);
+		//double kI = prefs->GetDouble("PID i constant", 0.0);
+		//double kD = prefs->GetDouble("PID d constant", 0.0);
 
 		//foo = SmartDashboard::GetNumber("Mobility", 2.5);
 		// Autonomous Modes
-		autochooser->AddDefault("Do Nothing", new autoNothing(15));
-		autochooser->AddObject("Lifter Test", new ForkMoveToDistance(24.0));
-		autochooser->AddObject("Basic Mobility", new autoTimedMove(mobility));
-		// autochooser->AddObject("Left Field Plates", new autoNearSwitch());
-		//autochooser->AddObject("Right Field Plates", new autoNothing(15));
+		autochooser->AddDefault("Do Nothing", new autoNothing(15)); // rotation is from SmartDashboard
+		autochooser->AddObject("Lifter Test", new ForkMoveToDistance(SWITCH_HEIGHT));
+		autochooser->AddObject("Basic Mobility", new autoTimedMove(mobility)); // mobility is from SmartDashboard
+		autochooser->AddObject("AutoTurn Test", new autoTurn('L'));
+		// autochooser->AddObject("Left Field Plates", new autoNearSwitch('L'));
+		// autochooser->AddObject("Right Field Plates", new autoNearSwitch('R'));
 
-		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(imu));
+		// FIXME: Use True/False to indicate drive with or without gyro/saucer mode?
+		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(CommandBase::utility->imu));
 		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
 
 		//SmartDashboard::init();
@@ -133,8 +123,7 @@ public:
 	{
 		std::string gameData;
 
-		imu->Reset();
-		gyroAngle = 0.0;
+		CommandBase::PIDelevator->PIDReset();
 
 		gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 		SmartDashboard::PutString("Plate Configuration: ", gameData);
@@ -149,7 +138,6 @@ public:
 	void AutonomousPeriodic() override
 	{
 		frc::Scheduler::GetInstance()->Run();
-		gyroAngle = imu->GetAngleZ();
 	}
 
 	void TeleopInit() override {
@@ -176,24 +164,38 @@ public:
 
 		if (teleopCommand != nullptr)
 			teleopCommand->Start();
-		/*
-		fork = new ForkMove();
-		if (fork != nullptr)
-			fork->Start();
-			*/
+
 	}
 
 	void TeleopPeriodic() override
 	{
-		gyroAngle = imu->GetAngleZ();
 		frc::Scheduler::GetInstance()->Run();
+
+		if (CommandBase::oi->xboxYBtn->Get())
+		{
+			CommandBase::PIDelevator->GotoPosition(SCALE_HEIGHT);
+		}
+		else if (CommandBase::oi->xboxXBtn->Get())
+		{
+			CommandBase::PIDelevator->GotoPosition(SWITCH_HEIGHT);
+		}
+		else if (CommandBase::oi->xboxController->GetRawAxis(2) > .15) // Left trigger
+		{
+			CommandBase::PIDelevator->Move(1.0); // FIXME: Define a macro for "
+		}
+		// Right trigger
+		else if (CommandBase::oi->xboxController->GetRawAxis(3) > .15)
+		{
+			CommandBase::PIDelevator->Move(-1.0);
+		}
+		else
+		{
+			CommandBase::PIDelevator->Enable();
+		}
 	}
 
 	void TestPeriodic() override
 	{
-		// How do we access the OI object from here? xboxController not recognized
-		// SmartDashboard::PutNumber("Left Stick X: ", oi->xboxController->GetX());
-		// SmartDashboard::PutNumber("Left Stick Y: ", oi->xboxController->GetY());
 	}
 
 };

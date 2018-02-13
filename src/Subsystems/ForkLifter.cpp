@@ -2,7 +2,7 @@
 
 ForkLifter::ForkLifter() : frc::Subsystem("ForkLifter")
 {
-	lm = new WPI_TalonSRX(POWERCUBE_LIFTER_ID); // Lifter motor
+	lm = new WPI_TalonSRX(POWERCUBE_LIFTER_MOTOR_ID); // Lifter motor
 	enc = new Encoder(FORKLIFT_MOTOR_ENCODER_CHANNEL_A, FORKLIFT_MOTOR_ENCODER_CHANNEL_B);
 	//enc->SetMaxPeriod(0.1);
 	//enc->SetMinRate(10);

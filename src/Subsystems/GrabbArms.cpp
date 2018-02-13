@@ -5,7 +5,7 @@
 
 GrabbArms::GrabbArms() : frc::Subsystem("GrabbArms")
 {
-	larm = new WPI_TalonSRX(LEFT_GRAB_MOTOR_ID); // left arm
+	// larm = new WPI_TalonSRX(LEFT_GRAB_MOTOR_ID); // left arm
 	//rarm = new WPI_TalonSRX(RIGHT_GRAB_MOTOR_ID); // right arm
 	//rarm->SetInverted(true);
 }
@@ -33,26 +33,26 @@ void GrabbArms::RightStop()
 
 void GrabbArms::LeftIn()
 {
-	larm->Set(IN);
+	//larm->Set(IN);
 
 }
 
 void GrabbArms::LeftStop()
 {
-	larm->Set(0.0);
+	//larm->Set(0.0);
 
 }
 
 void GrabbArms::Eject()
 {
-	larm->Set(OUT);
+	//larm->Set(OUT);
 	//rarm->Set(OUT);
 
 }
 
 void GrabbArms::AllStop()
 {
-	larm->Set(0.0);
+	//larm->Set(0.0);
 	//rarm->Set(0.0);
 }
 

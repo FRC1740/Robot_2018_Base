@@ -4,9 +4,10 @@
 #include <WPILib.h>
 #include <Commands/CommandGroup.h>
 
-class autoNearSwitch : public CommandGroup {
+class autoNearSwitch : public CommandGroup
+{
 public:
-	autoNearSwitch();
+	autoNearSwitch(char); // Go for the near switch. Argument is either 'L' or 'R' for which side we're on.
 };
 
 #endif  // autoNearSwitch_H

@@ -6,6 +6,7 @@ ForkMoveToDistance::ForkMoveToDistance(double dist)
 	// eg. Requires(Robot::chassis.get());
 	// Requires(forklifter);
 	//int current = forklifter->ReadEncoder();
+	Requires(PIDelevator);
 	target = dist;
 
 }
@@ -13,12 +14,15 @@ ForkMoveToDistance::ForkMoveToDistance(double dist)
 // Called just before this Command runs the first time
 void ForkMoveToDistance::Initialize()
 {
+	PIDelevator->GotoPosition(target);
+	printf("FormMoveToDistance: %f", target);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void ForkMoveToDistance::Execute()
 {
-	PIDelevator->GotoPosition(target);
+	// PIDelevator->GotoPosition(target);
+
 	/*
 	if (target > forklifter->ReadEncoder())
 	{
@@ -35,13 +39,14 @@ void ForkMoveToDistance::Execute()
 bool ForkMoveToDistance::IsFinished()
 {
 	return true; // Let PID handle the rest...
-	//return PIDelevator->OnTarget();
+	// return PIDelevator->OnTarget();
 	// return ((abs(target - forklifter->ReadEncoder())) < FORK_DISTANCE_DEADBAND);
 }
 
 // Called once after isFinished returns true
 void ForkMoveToDistance::End()
 {
+	// PIDelevator->CancelPID();
 	// forklifter->Stop();
 }
 

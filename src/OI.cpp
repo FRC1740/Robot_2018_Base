@@ -12,9 +12,9 @@
 #include <Commands/GearLight.h>
 // #include <Commands/GrabLeft.h> // FIXME: No longer using grab motors
 // #include <Commands/GrabRight.h> // FIXME: No longer using grab motors
-#include <Commands/PistonExtend.h> // FIXME: PistonExtend is actually a toggle
+#include <Commands/PistonExtend.h>
+#include <Commands/PistonRetract.h>
 #include <Commands/ForkMoveToDistance.h>
-#include <Commands/PistonExtend.h> // FIXME: PistonExtend is actually a toggle
 #include <Commands/Climb.h>
 #include <Commands/Descend.h>
 
@@ -44,45 +44,33 @@ OI::OI() {
 	JoystickButton *climbBtn = xboxBBtn;
 	JoystickButton *descendBtn = xboxABtn;
 
+	// Climb & Descend
+	descendBtn->WhileHeld(new Descend);
+	climbBtn->WhileHeld(new Climb);
+
+	// Fork/Elevator Auto Move to Level
 	xboxXBtn = new JoystickButton(xboxController, 3);
-	//JoystickButton *eject = xboxXBtn;
-
 	xboxYBtn = new JoystickButton(xboxController, 4);
-	JoystickButton *pistonBtn = xboxYBtn;
 
+	//xboxXBtn->WhenPressed(new ForkMoveToDistance(SWITCH_HEIGHT));
+	//xboxYBtn->WhenPressed(new ForkMoveToDistance(SCALE_HEIGHT));
+
+	// PowerCube Grab & Release (pneumatic piston)
 	lBumper = new JoystickButton(xboxController, 5);
-	// JoystickButton *grabLBtn = lBumper;
+	JoystickButton *PowercubeGrabBtn = lBumper;
 	rBumper = new JoystickButton(xboxController, 6);
-	//JoystickButton *grabRBtn = rBumper;
+	JoystickButton *PowercubeReleaseBtn = rBumper;
 
-	lBumper->WhenPressed(new ForkMoveToDistance(6.0));
-	rBumper->WhenPressed(new ForkMoveToDistance(100.0));
+	PowercubeGrabBtn->WhenPressed(new PistonExtend); // FIXME: May need to swap L/R buttons
+	PowercubeReleaseBtn->WhenPressed(new PistonRetract); // FIXME: May need to swap L/R buttons
 
 	// The Back Button is used to reset the gyro
 	xboxBackBtn = new JoystickButton(xboxController, 7);
 	xboxSetupBtn = new JoystickButton(xboxController, 8);
 	JoystickButton *testLightBtn = xboxSetupBtn;
 
-	// Climb & Descend
-	descendBtn->WhileHeld(new Descend);
-	climbBtn->WhileHeld(new Climb);
-
-	// PowerCube Eject FIXME: No more grab/eject motors
-	// eject->WhileHeld(new Eject); // FIXME: No more grab/eject motors
-
-	// Piston Extend & Retract is a "Y-Toggle"
-	pistonBtn->WhenPressed(new PistonExtend); // FIXME: Rename class? actually toggles extend/retract
-
 	// Green light from SteamWorks "Gear Ready"
 	testLightBtn->WhileHeld(new GearLight(false)); // FIXME: boolean argument left over from linear actuator testing
-
-	// PowerCube Grab FIXME: No more grab/eject motors
-	// grabLBtn->WhileHeld(new GrabLeft); FIXME: No more grab/eject motors
-	// grabRBtn->WhileHeld(new GrabRight); FIXME: No more grab/eject motors
-
-	// Linear Actuator Extend & Retract (Manual) Back/Setup buttons
-	//linearExtendBtn->WhileHeld(new GearLight(false));
-	//linearRetractBtn->WhileHeld(new GearLight(true));
 
 	// ForkLift Raise & Lower utilize AXES 2 & 3 (Left & Right Triggers)
 

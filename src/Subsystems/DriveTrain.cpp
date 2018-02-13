@@ -44,7 +44,7 @@ void DriveTrain::SaucerDrive(double angle, double magnitude)
 
 void DriveTrain::Go(double x, double y, double twist, double angle)
 {
-	SmartDashboard::PutNumber("Saucer Angle: ", (int)angle%360);
+	SmartDashboard::PutNumber("Streering Angle: ", (int)angle%360);
 
 	m_robotDrive->DriveCartesian(Db(x), Db(y), Db(twist), angle);
 
