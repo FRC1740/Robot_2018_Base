@@ -3,7 +3,7 @@
 GearLight::GearLight(bool direction) {
 	// Use Requires() here to declare subsystem dependencies
 	Requires(utility);
-	retract = direction; // true for retract, false for extend
+	//retract = direction; // true for retract, false for extend
 }
 
 // Called just before this Command runs the first time

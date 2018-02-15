@@ -4,7 +4,6 @@ autoNothing::autoNothing(double seconds)
 {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
-	Requires(PIDelevator);
 	timer = seconds;
 }
 

@@ -11,7 +11,7 @@ class autoTurn : public CommandBase
 {
 private:
 	double angle;
-	double turn_rate;
+	double m_turn_rate;
 public:
 	autoTurn(char);
 	void Initialize();

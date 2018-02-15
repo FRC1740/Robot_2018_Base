@@ -12,7 +12,7 @@ public:
 	bool IsFinished();
 	void End();
 	void Interrupted();
-	bool retract;
+	//bool retract;
 };
 
 #endif  // GearLight_H

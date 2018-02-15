@@ -11,13 +11,15 @@
  * The output shaft is connected to a driver sprocket with a 2.58 in diameter
  * The distance of one revolution is therfore approximately 8.1 inches.
  */
-// Tried .36, 1.44, .0225
+// Tried .36, 1.44, .0225 - BAD
+// Tried .048, 0.192, 0.006 - BETTER
+// Tried .048, 0.01, 0.001 - GOOD
 // PID Testing: kC = .08 Pc = .5
 // kP = .6 * kC
 // kI = 2*kP/Pc
 // kD = .125 * kP * Pc
 
-Elevator::Elevator() : PIDSubsystem("Elevator", .048, 0.192, 0.006)
+Elevator::Elevator() : PIDSubsystem("Elevator", .048, 0.005, 0.001)
 {
 	// Use these to get going:
 	// SetSetpoint() -  Sets where the PID controller should move the system
@@ -72,8 +74,9 @@ void Elevator::CancelPID()
 	Disable();
 }
 
-void Elevator::Move(double speed)
+void Elevator::Move(double speed) // Manual override...
 {
+	Disable();
 	elevatorMotor->Set(speed);
 	lastSetPoint = (double)enc->Get() * TICKS_PER_INCH;
 	SetSetpoint((double)enc->Get());

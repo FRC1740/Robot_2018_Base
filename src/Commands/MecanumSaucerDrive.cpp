@@ -26,6 +26,29 @@ void MecanumSaucerDrive::Execute()
 		else
 			gyro_angle = gyro->GetAngleZ();
 	}
+
+	// Check Operator input for Lifter commands
+	if (CommandBase::oi->xboxYBtn->Get())
+	{
+		CommandBase::PIDelevator->GotoPosition(SCALE_HEIGHT);
+	}
+	else if (CommandBase::oi->xboxXBtn->Get())
+	{
+		CommandBase::PIDelevator->GotoPosition(SWITCH_HEIGHT);
+	}
+	else if (CommandBase::oi->xboxController->GetRawAxis(2) > .15) // Left trigger
+	{
+		CommandBase::PIDelevator->Move(1.0); // FIXME: Define a macro for "
+	}
+	// Right trigger
+	else if (CommandBase::oi->xboxController->GetRawAxis(3) > .15)
+	{
+		CommandBase::PIDelevator->Move(-1.0);
+	}
+	else
+	{
+		CommandBase::PIDelevator->Enable();
+	}
 	// Engage!!!
 	// Fourth argument is Saucer Angle which is the negative of the gyro angle.
 	// If we're not using the imu (null pointer), gyro_angle remains 0.0

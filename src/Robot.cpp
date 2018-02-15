@@ -14,9 +14,10 @@
 
 #include "Commands/MecanumSaucerDrive.h"
 #include "Commands/autoNothing.h"
-#include "Commands/autoNearSwitch.h"
+#include "Commands/autoDelivery.h"
 #include "Commands/autoTimedMove.h"
 #include "Commands/autoTurn.h"
+#include "Commands/autoGroupTest.h"
 #include "Commands/ForkMoveToDistance.h"
 
 // #include "Subsystems/ForkLifter.h"
@@ -38,11 +39,9 @@ private:
 
 	SendableChooser<Command*> *autochooser;
 	SendableChooser<Command*> *teleopchooser;
-#ifdef USE_COMPRESSOR
-	Compressor *compressor;
-	bool compressorEnabled, compressorPressureSwitch;
-	double compressorCurrent;
-#endif
+
+	Preferences *m_prefs;
+	std::string m_gameData;
 
 public:
 
@@ -51,17 +50,54 @@ public:
 		CommandBase::init(); // Borrowed from 2017 code base
 		autochooser = new SendableChooser<Command*>;
 		teleopchooser = new SendableChooser<Command*>;
+		m_prefs = Preferences::GetInstance();
+
+		// double rotation = m_prefs->GetDouble("Rotation", 90.0); // changed to #define
+		//foo = SmartDashboard::GetNumber("Mobility", 2.5);
+
+		/*
+		 * Autonomous Sendable chooser troubleshooting
+		 *
+		char buffer[5][128];
+
+		sprintf(buffer[0], "Do Nothing %d", rand() % 0xffff );
+		autochooser->AddDefault(buffer[0], new autoNothing(15));
+
+		sprintf(buffer[1], "Lifter Test %d", rand() % 0xffff );
+		autochooser->AddObject(buffer[1], new ForkMoveToDistance(SWITCH_HEIGHT));
+		// Retrieve basic/timed mobility duration from SmartDashboard prefs
+		sprintf(buffer[2], "Basic Mobility %d", rand() % 0xffff );
+		autochooser->AddObject(buffer[2], new autoTimedMove(m_prefs->GetDouble("Mobility", 2.5)));
+
+		sprintf(buffer[3], "AutoTurn %d", rand() % 0xffff );
+		autochooser->AddObject(buffer[3], new autoTurn('L'));
+
+		sprintf(buffer[4], "Left Field Plates %d", rand() % 0xffff );
+		autochooser->AddObject(buffer[4], new autoGroupTest);
+
+		*/
+
+		autochooser->AddDefault("Do Nothing", new autoNothing(15));
+		autochooser->AddObject("Lifter Test", new ForkMoveToDistance(SWITCH_HEIGHT));
+		// Retrieve basic/timed mobility duration from SmartDashboard prefs
+		autochooser->AddObject("Basic Mobility", new autoTimedMove(m_prefs->GetDouble("Mobility", 2.5)));
+		autochooser->AddObject("Auto Turn Test", new autoTurn('L'));
+		autochooser->AddObject("Left Field Plates", new autoGroupTest);
+
+		//autochooser->AddObject("Left Field Plates", new autoDelivery);
+		//autochooser->AddObject("Right Field Plates", new autoDelivery('R'));
+
+		// FIXME: Use True/False to indicate drive with or without gyro/saucer mode?
+		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(CommandBase::utility->imu));
+		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
+
+		//SmartDashboard::init();
+		SmartDashboard::PutData("Auto Modes", autochooser);
+		SmartDashboard::PutData("Teleop Modes", teleopchooser);
+		// SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
 
 		SmartDashboard::PutString("Build Version: ", ROBOT_VERSION_STRING);
 
-#ifdef USE_COMPRESSOR
-		printf("Instantiating compressor object...\n");
-		compressor = new Compressor();
-		compressor->SetClosedLoopControl(true);
-		compressorEnabled = compressor->Enabled();
-		compressorPressureSwitch = compressor->GetPressureSwitchValue();
-		compressorCurrent = compressor->GetCompressorCurrent();
-#endif
 		cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
 		camera.SetResolution(640, 480);
 }
@@ -73,39 +109,33 @@ public:
 	 */
 	void DisabledInit() override
 	{
-		Preferences *prefs;
+		if (autonomousCommand != nullptr)
+		{
+			autonomousCommand->Cancel();
+			autonomousCommand = nullptr;
+		}
+		if (teleopCommand != nullptr)
+		{
+			teleopCommand->Cancel();
+			teleopCommand = nullptr;
+		}
 
-		prefs = Preferences::GetInstance();
-		double mobility = prefs->GetDouble("Mobility", 2.5);
-		double rotation = prefs->GetDouble("Rotation", 90.0);
+		// Referesh the preferences
+		double mobility = m_prefs->GetDouble("Mobility", 2.5);
+		double rotation = m_prefs->GetDouble("Rotation", 90.0);
 		CommandBase::PIDelevator->PIDReset();
-		//double kP = prefs->GetDouble("PID p constant", 1.0);
-		//double kI = prefs->GetDouble("PID i constant", 0.0);
-		//double kD = prefs->GetDouble("PID d constant", 0.0);
-
-		//foo = SmartDashboard::GetNumber("Mobility", 2.5);
-		// Autonomous Modes
-		autochooser->AddDefault("Do Nothing", new autoNothing(15)); // rotation is from SmartDashboard
-		autochooser->AddObject("Lifter Test", new ForkMoveToDistance(SWITCH_HEIGHT));
-		autochooser->AddObject("Basic Mobility", new autoTimedMove(mobility)); // mobility is from SmartDashboard
-		autochooser->AddObject("AutoTurn Test", new autoTurn('L'));
-		// autochooser->AddObject("Left Field Plates", new autoNearSwitch('L'));
-		// autochooser->AddObject("Right Field Plates", new autoNearSwitch('R'));
-
-		// FIXME: Use True/False to indicate drive with or without gyro/saucer mode?
-		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(CommandBase::utility->imu));
-		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
-
-		//SmartDashboard::init();
-		SmartDashboard::PutData("Auto Modes", autochooser);
-		SmartDashboard::PutData("Teleop Modes", teleopchooser);
-		// SmartDashboard::PutData("Grab Left Command", new GrabLeft()); //can run command on SmartDashboard
+		//double kP = m_prefs->GetDouble("PID p constant", 1.0);
+		//double kI = m_prefs->GetDouble("PID i constant", 0.0);
+		//double kD = m_prefs->GetDouble("PID d constant", 0.0);
 
 	}
 
 	void DisabledPeriodic() override
 	{
 		frc::Scheduler::GetInstance()->Run();
+		// ScreenstepsLive suggests checking the gameData string here so we have it BEFORE auto begins
+		m_gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+		// SmartDashboard::PutString("Plate Configuration: ", m_gameData);
 	}
 
 	/**
@@ -121,23 +151,20 @@ public:
 	 */
 	void AutonomousInit() override
 	{
-		std::string gameData;
-
 		CommandBase::PIDelevator->PIDReset();
 
-		gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-		SmartDashboard::PutString("Plate Configuration: ", gameData);
+		// Engage!!
 		autonomousCommand = (Command *) autochooser->GetSelected();
 		if (autonomousCommand != nullptr)
 		{
 			autonomousCommand->Start();
 		}
-
 	}
 
 	void AutonomousPeriodic() override
 	{
 		frc::Scheduler::GetInstance()->Run();
+		SmartDashboard::UpdateValues();
 	}
 
 	void TeleopInit() override {
@@ -159,39 +186,20 @@ public:
 		SmartDashboard::PutNumber("Compressor Current: ", compressorCurrent = compressor->GetCompressorCurrent());
 #endif
 		// If we're offering multiple drive/controller options through sendable chooser:
+
 		teleopCommand = (Command *) teleopchooser->GetSelected();
-		// teleopCommand = new MecanumSaucerDrive(imu);
 
 		if (teleopCommand != nullptr)
+		{
 			teleopCommand->Start();
-
+		}
 	}
 
 	void TeleopPeriodic() override
 	{
 		frc::Scheduler::GetInstance()->Run();
 
-		if (CommandBase::oi->xboxYBtn->Get())
-		{
-			CommandBase::PIDelevator->GotoPosition(SCALE_HEIGHT);
-		}
-		else if (CommandBase::oi->xboxXBtn->Get())
-		{
-			CommandBase::PIDelevator->GotoPosition(SWITCH_HEIGHT);
-		}
-		else if (CommandBase::oi->xboxController->GetRawAxis(2) > .15) // Left trigger
-		{
-			CommandBase::PIDelevator->Move(1.0); // FIXME: Define a macro for "
-		}
-		// Right trigger
-		else if (CommandBase::oi->xboxController->GetRawAxis(3) > .15)
-		{
-			CommandBase::PIDelevator->Move(-1.0);
-		}
-		else
-		{
-			CommandBase::PIDelevator->Enable();
-		}
+		// This whole mess should be moved into the command...
 	}
 
 	void TestPeriodic() override

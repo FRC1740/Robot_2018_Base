@@ -75,6 +75,6 @@ OI::OI() {
 	// ForkLift Raise & Lower utilize AXES 2 & 3 (Left & Right Triggers)
 
 	// Initialize the Co-Driver's controller in USB slot 5
-	NESController = new Joystick(5); // FIXME: Add NES Controller inputs & commands
+	//NESController = new Joystick(5); // FIXME: Add NES Controller inputs & commands
 
 }
