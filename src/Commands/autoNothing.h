@@ -2,6 +2,8 @@
 #define autoNothing_H
 
 #include "../CommandBase.h"
+#include "Subsystems/Elevator.h"
+#include <WPILib.h>
 
 class autoNothing : public CommandBase {
 private:

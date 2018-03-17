@@ -58,7 +58,6 @@ public:
 
 	void RobotInit() override
 	{
-
 		CommandBase::init(); // Borrowed from 2017 code base
 		imu = new ADIS16448_IMU(); // Instantiate before Sendable Chooser
 
@@ -90,7 +89,7 @@ public:
 #endif
 		cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
 		camera.SetResolution(640, 480);
-	}
+}
 
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
