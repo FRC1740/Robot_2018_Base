@@ -80,7 +80,7 @@ public:
 		*/
 
 		autochooser->AddDefault("Do Nothing", new autoNothing(15));
-		autochooser->AddObject("Lifter Test", new ForkMoveToDistance(SWITCH_HEIGHT));
+		// autochooser->AddObject("Lifter Test", new ForkMoveToDistance(SWITCH_HEIGHT));
 		// Retrieve basic/timed mobility duration from SmartDashboard prefs
 //		autochooser->AddObject("Timed Mobility", new autoTimedMove(m_prefs->GetDouble("Mobility", 2.5)));
 		autochooser->AddObject("Basic Mobility", new autoDriveDistance(AUTO_LINE_DISTANCE));

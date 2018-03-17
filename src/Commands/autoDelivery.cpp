@@ -8,6 +8,7 @@
 #include "autoDelivery.h"
 #include "autoNothing.h"
 #include "autoTimedMove.h"
+#include "autoTurn.h"
 #include "ForkMoveToDistance.h"
 
 autoDelivery::autoDelivery()
@@ -29,8 +30,8 @@ autoDelivery::autoDelivery()
 	// a CommandGroup containing them would require both the chassis and the
 	// arm.
 	AddSequential(new autoTimedMove(2.0));
-	AddParallel(new ForkMoveToDistance(100));
-	AddSequential(new autoNothing(1.0));
+	// AddParallel(new ForkMoveToDistance(100));
+	AddSequential(new autoTurn('L'));
 	AddSequential(new autoTimedMove(1.0));
 }
 #if 0

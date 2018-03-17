@@ -30,6 +30,7 @@ Elevator::Elevator() : PIDSubsystem("Elevator", .048, 0.005, 0.001)
 	elevatorMotor = new WPI_TalonSRX(POWERCUBE_LIFTER_MOTOR_ID);
 	enc->Reset();
 	lastSetPoint = 0.0;
+	Disable();
 }
 
 double Elevator::ReturnPIDInput()
@@ -60,8 +61,8 @@ void Elevator::InitDefaultCommand()
 
 void Elevator::GotoPosition(double position)
 {
-	SetSetpoint(position * TICKS_PER_INCH);
-	Enable();
+	// SetSetpoint(position * TICKS_PER_INCH);
+	// Enable();
 }
 
 int Elevator::GetEncoder()
@@ -79,7 +80,7 @@ void Elevator::Move(double speed) // Manual override...
 	Disable();
 	elevatorMotor->Set(speed);
 	lastSetPoint = (double)enc->Get() * TICKS_PER_INCH;
-	SetSetpoint((double)enc->Get());
+	// SetSetpoint((double)enc->Get());
 }
 void Elevator::Stop()
 {
@@ -87,8 +88,8 @@ void Elevator::Stop()
 }
 void Elevator::Hold()
 {
-	SetSetpoint(lastSetPoint);
-	Enable();
+	// SetSetpoint(lastSetPoint);
+	// Enable();
 }
 void Elevator::GroundFloor()
 {

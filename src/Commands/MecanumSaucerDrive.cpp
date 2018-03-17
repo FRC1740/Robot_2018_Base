@@ -6,6 +6,7 @@ MecanumSaucerDrive::MecanumSaucerDrive(ADIS16448_IMU *imu)
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
 	Requires(drivetrain);
+	Requires(forklifter);
 	gyro = imu;
 	gyro_angle = 0.0;
 }
@@ -28,6 +29,7 @@ void MecanumSaucerDrive::Execute()
 	}
 
 	// Check Operator input for Lifter commands
+	/*
 	if (CommandBase::oi->xboxYBtn->Get())
 	{
 		CommandBase::PIDelevator->GotoPosition(SCALE_HEIGHT);
@@ -49,6 +51,16 @@ void MecanumSaucerDrive::Execute()
 	{
 		CommandBase::PIDelevator->Enable();
 	}
+	*/
+	if (CommandBase::oi->xboxController->GetRawAxis(2) > .15) // Left Trigger -> Dn
+	{
+		forklifter->Lower(1.0);
+	}
+	else if (CommandBase::oi->xboxController->GetRawAxis(3) > .15) // Right Trigger -> Up
+	{
+		forklifter->Raise(1.0);
+	}
+
 	// Engage!!!
 	// Fourth argument is Saucer Angle which is the negative of the gyro angle.
 	// If we're not using the imu (null pointer), gyro_angle remains 0.0
