@@ -11,8 +11,10 @@
 #include "ForkMoveToDistance.h"
 #include "autoTurn.h"
 #include "autoNothing.h"
+#include "autoDriveDistance.h"
 #include "Eject.h"
 #include <string>
+#include <FieldMap.h>
 
 autoGroupTest::autoGroupTest()
 {
@@ -46,7 +48,7 @@ autoGroupTest::autoGroupTest()
 	// printf("Game Data: %c", gameData[0]);
 	// printf("Game Data: %c", gameData[1]);
 	//printf("Game Data: %c", gameData[2]);
-
+#if 0
 	if (gameData.length() > 0) // We received the plate configuration...
 	{
 
@@ -54,25 +56,30 @@ autoGroupTest::autoGroupTest()
 		{
 			// Do near switch
 			AddParallel(new ForkMoveToDistance(SWITCH_HEIGHT));
-			AddSequential(new autoTimedMove(mobility));
+			// AddSequential(new autoTimedMove(mobility));
+			AddSequential(new autoDriveDistance(NEAR_SWITCH_DISTANCE));
 			AddSequential(new autoTurn(side));
 			// May need another AddSequential() to move forward to switch plate?
 			AddSequential(new Eject());
+
 		}
 		else if (gameData[1] == side) // Is the scale on our side?
 		{
-			// Do Scale
+#endif			// Do Scale
 			AddParallel(new ForkMoveToDistance(SCALE_HEIGHT));
-			AddSequential(new autoTimedMove(mobility * 2));
+			// AddSequential(new autoTimedMove(mobility * 2));
+			AddSequential(new autoDriveDistance(SCALE_DISTANCE));
 			AddSequential(new autoTurn(side));
 			// May need another AddSequential() to move forward to switch plate?
 			AddSequential(new Eject());
+#if 0
 		}
 		else if (gameData[0] == side)
 		{
 			// Do far switch
 			AddParallel(new ForkMoveToDistance(SWITCH_HEIGHT));
-			AddSequential(new autoTimedMove(mobility * 3));
+			//AddSequential(new autoTimedMove(mobility * 3));
+			AddSequential(new autoDriveDistance(FAR_SWITCH_DISTANCE));
 			AddSequential(new autoTurn(side));
 			// May need another AddSequential() to move forward to switch plate?
 			AddSequential(new Eject());
@@ -89,5 +96,6 @@ autoGroupTest::autoGroupTest()
 		AddSequential(new autoTimedMove(mobility));
 	}
 	/* */
+#endif
 }
 

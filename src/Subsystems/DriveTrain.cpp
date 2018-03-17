@@ -9,6 +9,8 @@ DriveTrain::DriveTrain() : frc::Subsystem("DriveTrain")
 
 	m_robotDrive = new MecanumDrive(*fl, *rl, *fr, *rr);
 
+	rlCount = new Counter(REAR_LEFT_MOTOR_ENCODER_CHANNEL_A);
+
 	/* Set every Talon to reset the motor safety timeout. */
 	fl->Set(ControlMode::PercentOutput, 0);
 	fr->Set(ControlMode::PercentOutput, 0);
@@ -16,15 +18,13 @@ DriveTrain::DriveTrain() : frc::Subsystem("DriveTrain")
 	rr->Set(ControlMode::PercentOutput, 0);
 
 	// CRE: 2017-02-17 Initialize the encoder position so we can (hopefully) tell how far we've moved
+	rlCount->Reset();
 	// fl->SetPosition(0);
 	// fr->SetPosition(0);
-	// rl->SetPosition(0);
 	// rr->SetPosition(0);
 
-	// Create a RobotDrive object using PWMS 1, 2, 3, and 4
 	m_robotDrive->SetExpiration(0.5);
 	m_robotDrive->SetSafetyEnabled(false);
-
 }
 
 void DriveTrain::InitDefaultCommand()
@@ -36,7 +36,7 @@ void DriveTrain::InitDefaultCommand()
 
 void DriveTrain::SaucerDrive(double angle, double magnitude)
 {
-
+	rlCount->Reset();
 }
 
 // Put methods for controlling this subsystem
@@ -45,9 +45,9 @@ void DriveTrain::SaucerDrive(double angle, double magnitude)
 void DriveTrain::Go(double x, double y, double twist, double angle)
 {
 	SmartDashboard::PutNumber("Streering Angle: ", (int)angle%360);
+	SmartDashboard::PutNumber("Drive Counter: ", rlCount->Get());
 
 	m_robotDrive->DriveCartesian(Db(x), Db(y), Db(twist), angle);
-
 }
 
 void DriveTrain::Stop()
@@ -65,3 +65,11 @@ double DriveTrain::Db(double axisVal)
 	return 0;
 }
 
+void DriveTrain::Reset()
+{
+	rlCount->Reset();
+}
+int DriveTrain::GetCount()
+{
+	return rlCount->Get();
+}

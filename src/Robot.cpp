@@ -15,10 +15,12 @@
 #include "Commands/MecanumSaucerDrive.h"
 #include "Commands/autoNothing.h"
 #include "Commands/autoDelivery.h"
+#include "Commands/autoDriveDistance.h"
 #include "Commands/autoTimedMove.h"
 #include "Commands/autoTurn.h"
 #include "Commands/autoGroupTest.h"
 #include "Commands/ForkMoveToDistance.h"
+#include "FieldMap.h"
 
 // #include "Subsystems/ForkLifter.h"
 //#include "Commands/ForkMove.h"
@@ -80,7 +82,8 @@ public:
 		autochooser->AddDefault("Do Nothing", new autoNothing(15));
 		autochooser->AddObject("Lifter Test", new ForkMoveToDistance(SWITCH_HEIGHT));
 		// Retrieve basic/timed mobility duration from SmartDashboard prefs
-		autochooser->AddObject("Basic Mobility", new autoTimedMove(m_prefs->GetDouble("Mobility", 2.5)));
+//		autochooser->AddObject("Timed Mobility", new autoTimedMove(m_prefs->GetDouble("Mobility", 2.5)));
+		autochooser->AddObject("Basic Mobility", new autoDriveDistance(AUTO_LINE_DISTANCE));
 		autochooser->AddObject("Auto Turn Test", new autoTurn('L'));
 		autochooser->AddObject("Left Field Plates", new autoGroupTest);
 
@@ -135,7 +138,7 @@ public:
 		frc::Scheduler::GetInstance()->Run();
 		// ScreenstepsLive suggests checking the gameData string here so we have it BEFORE auto begins
 		m_gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-		// SmartDashboard::PutString("Plate Configuration: ", m_gameData);
+		SmartDashboard::PutString("Plate Configuration: ", m_gameData);
 	}
 
 	/**
@@ -178,15 +181,7 @@ public:
 			autonomousCommand = nullptr;
 		}
 
-#ifdef USE_COMPRESSOR
-		// -------------> Not working ---->SmartDashboard::PutNumber("Joystick X value", oi->extendBtn->Get());
-		//sd->PutNumber("Joystick X value", oi->extendBtn->Get());
-		SmartDashboard::PutBoolean("Compressor: ",compressor->Enabled());
-		SmartDashboard::PutBoolean("Pressure Switch: ", compressor->GetPressureSwitchValue());
-		SmartDashboard::PutNumber("Compressor Current: ", compressorCurrent = compressor->GetCompressorCurrent());
-#endif
 		// If we're offering multiple drive/controller options through sendable chooser:
-
 		teleopCommand = (Command *) teleopchooser->GetSelected();
 
 		if (teleopCommand != nullptr)
@@ -198,12 +193,12 @@ public:
 	void TeleopPeriodic() override
 	{
 		frc::Scheduler::GetInstance()->Run();
-
-		// This whole mess should be moved into the command...
+		SmartDashboard::UpdateValues();
 	}
 
 	void TestPeriodic() override
 	{
+		SmartDashboard::UpdateValues();
 	}
 
 };

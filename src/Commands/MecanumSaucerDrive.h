@@ -4,6 +4,7 @@
 #include <ADIS16448_IMU.h>
 #include "../CommandBase.h"
 #include "OI.h"
+#include "../FieldMap.h"
 
 #define SCALE_TWIST 1.0 // Adjust these to suit drivers' preference
 #define SCALE_YAXIS 1.0

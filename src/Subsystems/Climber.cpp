@@ -7,12 +7,12 @@ Climber::Climber() : frc::Subsystem("Climber")
 {
 	a = new WPI_TalonSRX(CLIMBER_MOTOR_1_ID); // Climber Motor 1
 	b = new WPI_TalonSRX(CLIMBER_MOTOR_2_ID); // Climber Motor 2
-	// enc = new Encoder(CLIMBER_MOTOR_ENCODER_CHANNEL_A, CLIMBER_MOTOR_ENCODER_CHANNEL_B);
+	enc = new Encoder(CLIMBER_MOTOR_ENCODER_CHANNEL_A, CLIMBER_MOTOR_ENCODER_CHANNEL_B);
 
 	// a->Set(ControlMode::PercentOutput, 0);
 	// b->Set(ControlMode::PercentOutput, 0);
 	EncoderValue = 0;
-	//enc->Reset();
+	enc->Reset();
 
 }
 
@@ -29,16 +29,16 @@ void Climber::Climb()
 {
 	b->Set(CLIMB);
 	a->Set(-CLIMB);
-	//EncoderValue = enc->Get();
-	//SmartDashboard::PutNumber("Climber Encoder: ", EncoderValue);
+	EncoderValue = enc->Get();
+	SmartDashboard::PutNumber("Climber Encoder: ", EncoderValue);
 }
 
 void Climber::Descend()
 {
 	b->Set(DESCEND);
 	a->Set(-DESCEND);
-	//EncoderValue = enc->Get();
-	//SmartDashboard::PutNumber("Climber Encoder: ", EncoderValue);
+	EncoderValue = enc->Get();
+	SmartDashboard::PutNumber("Climber Encoder: ", EncoderValue);
 }
 
 void Climber::Stop()
@@ -49,5 +49,5 @@ void Climber::Stop()
 
 int Climber::GetPosition()
 {
-	//return enc->Get();
+	return enc->Get();
 }

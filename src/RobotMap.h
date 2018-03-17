@@ -38,10 +38,6 @@
 #define CLIMBER_MOTOR_2_ID 6
 #define POWERCUBE_LIFTER_MOTOR_ID 7
 
-// Field Elements for PowerCube Lift
-#define SWITCH_HEIGHT 18.75 // inches
-#define SCALE_HEIGHT 84.0
-
 // Encoder DIO Ports
 #define FORKLIFT_MOTOR_ENCODER_CHANNEL_A 0
 #define FORKLIFT_MOTOR_ENCODER_CHANNEL_B 1
@@ -52,7 +48,7 @@
 // Wired directly to TALONS, not through RoboRio,
 // since there are only 9 DIO ports on the Rio
 #define REAR_LEFT_MOTOR_ENCODER_CHANNEL_A 4
-#define REAR_LEFT_MOTOR_ENCODER_CHANNEL_B 5
+// #define REAR_LEFT_MOTOR_ENCODER_CHANNEL_B 5
 
 // If you are using multiple modules, make sure to define both the port
 // number and the module. For example you with a rangefinder:

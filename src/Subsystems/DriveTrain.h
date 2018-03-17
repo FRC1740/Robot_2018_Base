@@ -31,6 +31,7 @@ private:
 	WPI_TalonSRX *rr; // Rear Right motor
 	char gyroString[128];
 	MecanumDrive *m_robotDrive;
+	Counter *rlCount; // Rear Left Wheel counter (not an encoder)
 
 public:
 	DriveTrain();
@@ -39,6 +40,8 @@ public:
 	void Go(double, double, double, double); // Left X, Left Y, Twist, Angle
 	void Stop(); // All Stop
 	double Db(double); // Deadband
+	void Reset(); // Reset counter/encoder
+	int GetCount(); // Returns counter value
 };
 
 #endif  // DriveTrain_H
