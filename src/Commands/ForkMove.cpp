@@ -66,4 +66,3 @@ double ForkMove::GetRightTrig()
 {
 	return oi->xboxController->GetRawAxis(3); //Right trigger
 }
-

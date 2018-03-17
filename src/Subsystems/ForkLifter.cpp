@@ -60,4 +60,3 @@ double ForkLifter::ApplyDeadband(double TrgAmnt)
 		return 0.0;
 	}
 }
-
