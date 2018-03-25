@@ -13,6 +13,7 @@
 #include <TimedRobot.h>
 
 #include "Commands/MecanumSaucerDrive.h"
+//#include "Commands/TankDrive.h"
 #include "Commands/autoNothing.h"
 #include "Commands/autoDelivery.h"
 #include "Commands/autoDriveDistance.h"
@@ -91,8 +92,9 @@ public:
 		//autochooser->AddObject("Right Field Plates", new autoDelivery('R'));
 
 		// FIXME: Use True/False to indicate drive with or without gyro/saucer mode?
-		teleopchooser->AddDefault("Xbox Saucer", new MecanumSaucerDrive(CommandBase::utility->imu));
-		teleopchooser->AddObject("Xbox Standard", new MecanumSaucerDrive(nullptr));
+		teleopchooser->AddDefault("Xbox Standard", new MecanumSaucerDrive(nullptr));
+		teleopchooser->AddObject("Xbox Saucer", new MecanumSaucerDrive(CommandBase::utility->imu));
+//		teleopchooser->AddObject("Xbox Tank Drive", new TankDrive());
 
 		//SmartDashboard::init();
 		SmartDashboard::PutData("Auto Modes", autochooser);

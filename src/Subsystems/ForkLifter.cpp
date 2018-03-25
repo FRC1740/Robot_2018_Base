@@ -37,7 +37,6 @@ void ForkLifter::Lower(double speed)
 
 void ForkLifter::Stop()
 {
-
 	lm->Set(0.0);
 }
 int ForkLifter::ReadEncoder()

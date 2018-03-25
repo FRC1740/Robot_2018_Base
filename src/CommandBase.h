@@ -10,6 +10,7 @@
 #include "Subsystems/Utility.h"
 #include "Subsystems/Piston.h"
 #include "Subsystems/DriveTrain.h"
+#include "Subsystems/DriveTrainFriction.h"
 #include "Subsystems/Climber.h"
 
 /**
@@ -30,6 +31,7 @@ public:
 	static ForkLifter *forklifter;
 	static Piston *piston;
 	static DriveTrain *drivetrain;
+	static DriveTrainFriction *drivetrainf;
 	static Utility *utility;
 	//	static DataLogger *datalogger;
 	//	static Camera *camera;

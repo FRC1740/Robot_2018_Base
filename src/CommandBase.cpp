@@ -5,6 +5,7 @@
 Climber* CommandBase::climber;
 OI* CommandBase::oi = NULL;
 DriveTrain* CommandBase::drivetrain = NULL;
+DriveTrainFriction* CommandBase::drivetrainf = NULL;
 Piston*	CommandBase::piston = NULL;
 Utility* CommandBase::utility = NULL;
 // GrabbArms* CommandBase::grabbarms = NULL;
@@ -19,6 +20,7 @@ CommandBase::CommandBase(): Command() {}
 void CommandBase::init()
 {
 	drivetrain = new DriveTrain();
+	drivetrainf = new DriveTrainFriction();
 	climber = new Climber();
 	oi = new OI();
 //	datalogger = new DataLogger();

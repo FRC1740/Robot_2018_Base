@@ -60,11 +60,17 @@ void MecanumSaucerDrive::Execute()
 	{
 		forklifter->Raise(1.0);
 	}
+	else
+	{
+		forklifter->Stop();
+	}
 
 	// Engage!!!
 	// Fourth argument is Saucer Angle which is the negative of the gyro angle.
 	// If we're not using the imu (null pointer), gyro_angle remains 0.0
-	drivetrain->Go(this->GetX(), this->GetInvertedY(), this->GetTwist(), -gyro_angle);
+	// drivetrain->Go(this->GetX(), this->GetInvertedY(), this->GetTwist(), -gyro_angle);
+	// Disable skating
+	drivetrain->Go(0.0, this->GetInvertedY(), this->GetTwist(), -gyro_angle);
 }
 
 // Make this return true when this Command no longer needs to run execute()
