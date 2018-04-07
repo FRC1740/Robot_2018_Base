@@ -26,9 +26,9 @@ Elevator::Elevator() : PIDSubsystem("Elevator", .048, 0.005, 0.001)
 	//                  to
 	// Enable() - Enables the PID controller.
 	GetPIDController()->SetContinuous(false);
-	enc = new Encoder(FORKLIFT_MOTOR_ENCODER_CHANNEL_A, FORKLIFT_MOTOR_ENCODER_CHANNEL_B);
+//	enc = new Encoder(FORKLIFT_MOTOR_ENCODER_CHANNEL_A, FORKLIFT_MOTOR_ENCODER_CHANNEL_B);
 	elevatorMotor = new WPI_TalonSRX(POWERCUBE_LIFTER_MOTOR_ID);
-	enc->Reset();
+//	enc->Reset();
 	lastSetPoint = 0.0;
 	Disable();
 }
@@ -38,12 +38,13 @@ double Elevator::ReturnPIDInput()
 	// Return your input value for the PID loop
 	// e.g. a sensor, like a potentiometer:
 	// yourPot->SetAverageVoltage() / kYourMaxVoltage;
-	double current = (double)enc->Get();
-	SmartDashboard::PutNumber("Ticks Per Inch: ", TICKS_PER_INCH);
-	SmartDashboard::PutNumber("Inches Per Revolution: ", INCHES_PER_REVOLUTION);
-	SmartDashboard::PutNumber("Powercube Encoder", current);
-	SmartDashboard::PutNumber("Powercube Height", current/TICKS_PER_INCH);
-	return (double)current;
+//	double current = (double)enc->Get();
+//	SmartDashboard::PutNumber("Ticks Per Inch: ", TICKS_PER_INCH);
+//	SmartDashboard::PutNumber("Inches Per Revolution: ", INCHES_PER_REVOLUTION);
+//	SmartDashboard::PutNumber("Powercube Encoder", current);
+//	SmartDashboard::PutNumber("Powercube Height", current/TICKS_PER_INCH);
+//	return (double)current;
+	return (0.0); // No encoder
 }
 
 void Elevator::UsePIDOutput(double output)
@@ -67,7 +68,8 @@ void Elevator::GotoPosition(double position)
 
 int Elevator::GetEncoder()
 {
-	return enc->Get();
+//	return enc->Get();
+	return(0); // No encoder
 }
 
 void Elevator::CancelPID()
@@ -79,7 +81,7 @@ void Elevator::Move(double speed) // Manual override...
 {
 	Disable();
 	elevatorMotor->Set(speed);
-	lastSetPoint = (double)enc->Get() * TICKS_PER_INCH;
+//	lastSetPoint = (double)enc->Get() * TICKS_PER_INCH;
 	// SetSetpoint((double)enc->Get());
 }
 void Elevator::Stop()
@@ -99,6 +101,6 @@ void Elevator::GroundFloor()
 void Elevator::PIDReset()
 {
 	Disable();
-	enc->Reset();
+//	enc->Reset();
 	lastSetPoint = 0.0;
 }

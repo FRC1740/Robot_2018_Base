@@ -2,7 +2,7 @@
 #define ForkLifter_H
 #define FORK_DEADBAND 0.2
 #define LIFTER_RATIO 1.0
-#define FORK_SPEED 1.0
+#define FORK_SPEED .25
 #include "../RobotMap.h"
 #include <ctre/Phoenix.h>
 #include <Commands/Subsystem.h>

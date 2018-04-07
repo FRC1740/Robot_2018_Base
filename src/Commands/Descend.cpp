@@ -28,12 +28,12 @@ bool Descend::IsFinished() {
 // Called once after isFinished returns true
 void Descend::End()
 {
-	climber->Stop();
+	climber->StopClimb();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void Descend::Interrupted()
 {
-	climber->Stop();
+	climber->StopClimb();
 }

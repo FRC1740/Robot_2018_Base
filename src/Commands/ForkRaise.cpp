@@ -1,39 +1,41 @@
-#include "Climb.h"
-#include "../RobotMap.h"
+#include "ForkRaise.h"
 
-Climb::Climb()
+ForkRaise::ForkRaise(double s)
 {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
-	Requires(climber);
+	// Requires(grabbarms);
+	Requires(forklifter);
+	m_timer = s;
 }
 
 // Called just before this Command runs the first time
-void Climb::Initialize()
+void ForkRaise::Initialize()
 {
-
+	SetTimeout(m_timer);
 }
 
 // Called repeatedly when this Command is scheduled to run
-void Climb::Execute()
+void ForkRaise::Execute()
 {
-	climber->Climb();
+	forklifter->Raise(1.0);
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool Climb::IsFinished() {
-	return false;
+bool ForkRaise::IsFinished()
+{
+	return (IsTimedOut());
 }
 
 // Called once after isFinished returns true
-void Climb::End()
+void ForkRaise::End()
 {
-	climber->StopClimb();
+	forklifter->Stop();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void Climb::Interrupted()
+void ForkRaise::Interrupted()
 {
-	climber->StopClimb();
+	forklifter->Stop();
 }

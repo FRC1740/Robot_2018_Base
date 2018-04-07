@@ -21,6 +21,8 @@
 #include "Commands/autoTurn.h"
 #include "Commands/autoGroupTest.h"
 #include "Commands/ForkMoveToDistance.h"
+#include "Commands/ForkRaise.h"
+#include "Commands/ForkLower.h"
 #include "FieldMap.h"
 
 // #include "Subsystems/ForkLifter.h"
@@ -59,31 +61,13 @@ public:
 		//foo = SmartDashboard::GetNumber("Mobility", 2.5);
 
 		/*
-		 * Autonomous Sendable chooser troubleshooting
-		 *
-		char buffer[5][128];
-
-		sprintf(buffer[0], "Do Nothing %d", rand() % 0xffff );
-		autochooser->AddDefault(buffer[0], new autoNothing(15));
-
-		sprintf(buffer[1], "Lifter Test %d", rand() % 0xffff );
-		autochooser->AddObject(buffer[1], new ForkMoveToDistance(SWITCH_HEIGHT));
-		// Retrieve basic/timed mobility duration from SmartDashboard prefs
-		sprintf(buffer[2], "Basic Mobility %d", rand() % 0xffff );
-		autochooser->AddObject(buffer[2], new autoTimedMove(m_prefs->GetDouble("Mobility", 2.5)));
-
-		sprintf(buffer[3], "AutoTurn %d", rand() % 0xffff );
-		autochooser->AddObject(buffer[3], new autoTurn('L'));
-
-		sprintf(buffer[4], "Left Field Plates %d", rand() % 0xffff );
-		autochooser->AddObject(buffer[4], new autoGroupTest);
-
+		 * Autonomous Sendable chooser modes
 		*/
 
 		autochooser->AddDefault("Do Nothing", new autoNothing(15));
 		// autochooser->AddObject("Lifter Test", new ForkMoveToDistance(SWITCH_HEIGHT));
 		// Retrieve basic/timed mobility duration from SmartDashboard prefs
-//		autochooser->AddObject("Timed Mobility", new autoTimedMove(m_prefs->GetDouble("Mobility", 2.5)));
+		autochooser->AddObject("Timed Mobility", new autoTimedMove(m_prefs->GetDouble("Mobility", 2.0))); // 42 in/sec? - auto line 75 in
 		autochooser->AddObject("Basic Mobility", new autoDriveDistance(AUTO_LINE_DISTANCE));
 		autochooser->AddObject("Auto Turn Test", new autoTurn('L'));
 		autochooser->AddObject("Left Field Plates", new autoGroupTest);

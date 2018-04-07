@@ -19,9 +19,13 @@ private:
 public:
 	Climber();
 	void InitDefaultCommand();
+	void StopClimb();
+	void StopTelescope();
 	void Climb();
 	void Descend();
 	void Stop();
+	void Extend();
+	void Retract();
 	int GetPosition();
 };
 

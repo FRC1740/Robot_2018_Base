@@ -1,7 +1,7 @@
-#include "Climb.h"
-#include "../RobotMap.h"
 
-Climb::Climb()
+#include "Retract.h"
+
+Retract::Retract()
 {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
@@ -9,31 +9,31 @@ Climb::Climb()
 }
 
 // Called just before this Command runs the first time
-void Climb::Initialize()
+void Retract::Initialize()
 {
 
 }
 
 // Called repeatedly when this Command is scheduled to run
-void Climb::Execute()
+void Retract::Execute()
 {
-	climber->Climb();
+	climber->Retract();
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool Climb::IsFinished() {
+bool Retract::IsFinished() {
 	return false;
 }
 
 // Called once after isFinished returns true
-void Climb::End()
+void Retract::End()
 {
-	climber->StopClimb();
+	climber->StopTelescope();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void Climb::Interrupted()
+void Retract::Interrupted()
 {
-	climber->StopClimb();
+	climber->StopTelescope();
 }

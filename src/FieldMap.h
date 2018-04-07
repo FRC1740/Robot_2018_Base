@@ -11,7 +11,7 @@
 // Field Element Constants
 
 // Autonomous Distances to Scale/Switch/etc.
-#define AUTO_LINE_DISTANCE 75.0 // inches. Robot should cross auto line by abt 3 in. Started 85. Too far
+#define AUTO_LINE_DISTANCE 96.0 // inches. 75 @ Hartford short by 1-2 feet
 #define NEAR_SWITCH_DISTANCE 135.0 // center of robot aligned with center of near switch Started 137. a bit too far
 #define SCALE_DISTANCE 293.0 // center of robot aligned with center of scale Started 305
 #define FAR_SWITCH_DISTANCE 461.0 // center of robot aligned with center of far switch

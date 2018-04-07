@@ -17,14 +17,16 @@
 #include <Commands/ForkMoveToDistance.h>
 #include <Commands/Climb.h>
 #include <Commands/Descend.h>
+#include <Commands/Extend.h>
+#include <Commands/Retract.h>
 
 /* ****
  *
  * 	xBox Controller button mapping:
- * 	Button 1 - A - Descend
- * 	Button 2 - B - Climb
- * 	Button 3 - X - unused
- * 	Button 4 - Y - Pneumatic toggle
+ * 	Button 1 - A - Climb
+ * 	Button 2 - B - Descend
+ * 	Button 3 - X - Extend
+ * 	Button 4 - Y - Retract
  * 	Button 5 - Left Bumper - unused
  * 	Button 6 - Right Bumper - unused
  * 	Button 7 - Back - Reset Gyro
@@ -41,19 +43,22 @@ OI::OI() {
 	// xBox Button Mapping
 	xboxABtn = new JoystickButton(xboxController, 1);
 	xboxBBtn = new JoystickButton(xboxController, 2);
-	JoystickButton *climbBtn = xboxBBtn;
-	JoystickButton *descendBtn = xboxABtn;
+	JoystickButton *climbBtn = xboxABtn;
+	JoystickButton *descendBtn = xboxBBtn;
 
 	// Climb & Descend
 	descendBtn->WhileHeld(new Descend);
 	climbBtn->WhileHeld(new Climb);
 
-	// Fork/Elevator Auto Move to Level
+	// Telescope extendretract
 	xboxXBtn = new JoystickButton(xboxController, 3);
 	xboxYBtn = new JoystickButton(xboxController, 4);
 
-	//xboxXBtn->WhenPressed(new ForkMoveToDistance(SWITCH_HEIGHT));
-	//xboxYBtn->WhenPressed(new ForkMoveToDistance(SCALE_HEIGHT));
+	JoystickButton *extendBtn = xboxXBtn;
+	JoystickButton *retractBtn = xboxYBtn;
+
+	extendBtn->WhileHeld(new Extend);
+	retractBtn->WhileHeld(new Retract);
 
 	// PowerCube Grab & Release (pneumatic piston)
 	lBumper = new JoystickButton(xboxController, 5);
