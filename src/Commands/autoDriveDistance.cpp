@@ -21,6 +21,7 @@ autoDriveDistance::autoDriveDistance(double distance)
 void autoDriveDistance::Initialize()
 {
 	drivetrain->Reset(); // Reset counter
+	utility->ImuReset(); // Reset IMU gyro angle
 }
 
 // Called repeatedly when this Command is scheduled to run

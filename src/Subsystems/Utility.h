@@ -20,6 +20,7 @@ public:
 	double linearGetPosition(); // retrieve position of linear actuator
 	void linearGoTo(double); // Extend to a specific distance
 	double GetAngle();
+	double ImuReset();
 };
 
 #endif

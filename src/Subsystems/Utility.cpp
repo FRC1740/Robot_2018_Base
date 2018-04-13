@@ -42,4 +42,8 @@ double Utility::GetAngle()
 {
 	return imu->GetAngleZ();
 }
+double Utility::ImuReset()
+{
+	imu->Reset();
+}
 /* */

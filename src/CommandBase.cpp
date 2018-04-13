@@ -22,7 +22,6 @@ void CommandBase::init()
 	drivetrain = new DriveTrain();
 	drivetrainf = new DriveTrainFriction();
 	climber = new Climber();
-	oi = new OI();
 //	datalogger = new DataLogger();
 	piston = new Piston();
 //	camera = new Camera();
@@ -30,4 +29,7 @@ void CommandBase::init()
 	forklifter = new ForkLifter();
 	PIDelevator = new Elevator();
 //	grabbarms = new GrabbArms();
+
+	// Keep OI() last since it calls methods in above subsystems
+	oi = new OI();
 }

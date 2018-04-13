@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "autoGroupTest.h"
+#include "autoRightSwitch.h"
 #include "autoNothing.h"
 #include "autoTimedMove.h"
 #include "ForkMoveToDistance.h"
@@ -18,7 +18,7 @@
 #include <string>
 #include <FieldMap.h>
 
-autoGroupTest::autoGroupTest()
+autoRightSwitch::autoRightSwitch()
 {
 	// Add Commands here:
 	// e.g. AddSequential(new Command1());
@@ -37,7 +37,7 @@ autoGroupTest::autoGroupTest()
 	// a CommandGroup containing them would require both the chassis and the
 	// arm.
 
-	char side = 'L';
+	char side = 'R';
 	std::string gameData;
 	double mobility = SmartDashboard::GetNumber("Mobility", 1.0);
 
@@ -55,11 +55,6 @@ autoGroupTest::autoGroupTest()
 		AddSequential(new autoDriveDistance(AUTO_LINE_DISTANCE));
 		if (gameData[0] == side) // Is the near switch on our side?
 		{
-			AddSequential(new autoTurn(side));
-			AddSequential(new autoDriveDistance(20.0)); // Guessing at 20 inches
-			// AddSequential (new ForkLower(.25));
-			// AddSequential (new autoNothing(2.0));
-			// May need another AddSequential() to move forward to switch plate?
 			AddSequential(new Eject());
 
 		}

@@ -19,6 +19,7 @@
 #include "Commands/autoDriveDistance.h"
 #include "Commands/autoTimedMove.h"
 #include "Commands/autoTurn.h"
+#include "Commands/autoRightSwitch.h"
 #include "Commands/autoGroupTest.h"
 #include "Commands/ForkMoveToDistance.h"
 #include "Commands/ForkRaise.h"
@@ -70,9 +71,10 @@ public:
 		autochooser->AddObject("Timed Mobility", new autoTimedMove(m_prefs->GetDouble("Mobility", 2.0))); // 42 in/sec? - auto line 75 in
 		autochooser->AddObject("Basic Mobility", new autoDriveDistance(AUTO_LINE_DISTANCE));
 		autochooser->AddObject("Auto Turn Test", new autoTurn('L'));
-		autochooser->AddObject("Left Field Plates", new autoGroupTest);
+		autochooser->AddObject("Left Field Plates", new autoGroupTest());
+		autochooser->AddObject("Right Switch Straight", new autoRightSwitch());
 
-		//autochooser->AddObject("Left Field Plates", new autoDelivery);
+		//autochooser->AddObject("Left Field Plates", new autoDelivery());
 		//autochooser->AddObject("Right Field Plates", new autoDelivery('R'));
 
 		// FIXME: Use True/False to indicate drive with or without gyro/saucer mode?
