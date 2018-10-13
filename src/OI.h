@@ -14,15 +14,6 @@ public:
 	// Driver - XBoxController
 	Joystick *xboxController;
 
-	// Map buttons for turning in gear light
-	// JoystickButton *gearLightBtn;
-
-	// Linear Actuator
-	// JoystickButton *extendBtn;
-	// JoystickButton *retractBtn;
-
-	// Climb & Descend are Triggers (axes 2 & 3)
-
 	// Forklift Raise & Lower
 	JoystickButton *xboxABtn; // Button 1
 	JoystickButton *xboxBBtn; // Button 2
@@ -39,7 +30,7 @@ public:
 
 	// Linear Actuator
 	JoystickButton *xboxBackBtn; // Button 7
-	JoystickButton *xboxSetupBtn;
+	JoystickButton *xboxSetupBtn; // Button 8
 
 	// Co-Driver - NES Controller
 	Joystick *NESController;

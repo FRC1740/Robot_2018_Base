@@ -1,39 +1,41 @@
-#include "GrabRight.h"
+#include "ForkLower.h"
 
-GrabRight::GrabRight()
+ForkLower::ForkLower(double s)
 {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
 	// Requires(grabbarms);
+	Requires(forklifter);
+	m_timer = s;
 }
 
 // Called just before this Command runs the first time
-void GrabRight::Initialize()
+void ForkLower::Initialize()
 {
-
+	SetTimeout(m_timer);
 }
 
 // Called repeatedly when this Command is scheduled to run
-void GrabRight::Execute()
+void ForkLower::Execute()
 {
-	// grabbarms->RightIn();
+	forklifter->Lower(1.0);
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool GrabRight::IsFinished()
+bool ForkLower::IsFinished()
 {
-	return true;
+	return (IsTimedOut());
 }
 
 // Called once after isFinished returns true
-void GrabRight::End()
+void ForkLower::End()
 {
-	// grabbarms->RightStop();
+	forklifter->Stop();
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void GrabRight::Interrupted()
+void ForkLower::Interrupted()
 {
-	// grabbarms->RightStop();
+	forklifter->Stop();
 }

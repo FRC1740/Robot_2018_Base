@@ -5,9 +5,10 @@
 Climber* CommandBase::climber;
 OI* CommandBase::oi = NULL;
 DriveTrain* CommandBase::drivetrain = NULL;
+DriveTrainFriction* CommandBase::drivetrainf = NULL;
 Piston*	CommandBase::piston = NULL;
 Utility* CommandBase::utility = NULL;
-GrabbArms* CommandBase::grabbarms = NULL;
+// GrabbArms* CommandBase::grabbarms = NULL;
 //Camera* CommandBase::camera = NULL;
 ForkLifter* CommandBase::forklifter = NULL;
 Elevator* CommandBase::PIDelevator = NULL;
@@ -19,13 +20,16 @@ CommandBase::CommandBase(): Command() {}
 void CommandBase::init()
 {
 	drivetrain = new DriveTrain();
+	drivetrainf = new DriveTrainFriction();
 	climber = new Climber();
-	oi = new OI();
 //	datalogger = new DataLogger();
 	piston = new Piston();
 //	camera = new Camera();
 	utility = new Utility();
 	forklifter = new ForkLifter();
 	PIDelevator = new Elevator();
-	grabbarms = new GrabbArms();
+//	grabbarms = new GrabbArms();
+
+	// Keep OI() last since it calls methods in above subsystems
+	oi = new OI();
 }

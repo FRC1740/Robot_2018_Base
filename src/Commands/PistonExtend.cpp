@@ -11,7 +11,8 @@ PistonExtend::PistonExtend()
 void PistonExtend::Initialize()
 {
 	// This is where we can extend the piston
-	piston->Toggle();
+	// piston->Toggle();
+	piston->Extend();
 }
 
 // Called repeatedly when this Command is scheduled to run

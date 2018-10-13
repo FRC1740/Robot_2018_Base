@@ -4,7 +4,7 @@ autoNothing::autoNothing(double seconds)
 {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
-	Requires(PIDelevator);
+	// Requires(PIDelevator);
 	timer = seconds;
 }
 
@@ -12,7 +12,7 @@ autoNothing::autoNothing(double seconds)
 void autoNothing::Initialize()
 {
 	SetTimeout(timer);
-	PIDelevator->GotoPosition(timer);
+	// PIDelevator->GotoPosition(timer);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -24,17 +24,21 @@ void autoNothing::Execute()
 // Make this return true when this Command no longer needs to run execute()
 bool autoNothing::IsFinished()
 {
-	return PIDelevator->OnTarget();
-	// return IsTimedOut();
+	// return PIDelevator->OnTarget();
+	return IsTimedOut();
 }
 
 // Called once after isFinished returns true
 void autoNothing::End()
 {
+	// Stop doing nothing...
+	return;
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void autoNothing::Interrupted()
 {
+	// Stop doing nothing...
+	return;
 }
