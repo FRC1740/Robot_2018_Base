@@ -18,6 +18,7 @@ void autoNothing::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void autoNothing::Execute()
 {
+	frc::SmartDashboard::PutNumber("PID Elevator distance to target: ", PIDelevator->GetEncoder());
 }
 
 // Make this return true when this Command no longer needs to run execute()

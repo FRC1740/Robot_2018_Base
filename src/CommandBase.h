@@ -29,6 +29,7 @@ public:
 	static OI *oi;
 	static Elevator *PIDelevator;
 	static ForkLifter *forklifter;
+	static Elevator *PIDelevator;
 	static Piston *piston;
 	static DriveTrain *drivetrain;
 	static DriveTrainFriction *drivetrainf;
